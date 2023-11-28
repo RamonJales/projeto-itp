@@ -11,45 +11,30 @@ enum DataType {
     STRING,
 };
 
-typedef struct Table
-{
+typedef struct Table {
     int tableId;
     char tableName[100];
 } Table;
 
-typedef struct 
-{
+typedef struct {
     int numTables;
     Table *tables[100];
 } Database;
 
-void interface(){
-    printf("°---------------------------------------------------°\n");
-    printf("Escolha a opção: \n");
-    printf("1 - Criar tabela\n");
-    printf("2 - Listar as tabelas existentes\n");
-    printf("3 - Criar nova linha na tabela\n");
-    printf("4 - Listar os dados de uma tabela existente\n");
-    printf("5 - Achar um valor em uma tabela existente\n");
-    printf("6 - Apagar o nome e chave primária de uma tabela\n");
-    printf("°---------------------------------------------------°\n");
-}
-
-void ListTable(Database myDatabase){
+void listTable(Database myDatabase){
     printf("Tabelas existentes:\n");
     for(int i = 0; i < myDatabase.numTables; i++) {
         printf("%s\n", myDatabase.tables[i]->tableName);
     }
 }
 
-
-void pullDataFromTable(const char *tableName) {
+void printDataFromTable(const char *tableName) {
     FILE *file;
     char filename[100];
     char line[100];
 
     strcpy(filename, tableName);
-    strcat(filename, ".txt");
+    strcat(filename, ".itp");
 
     file = fopen(filename, "r");
 
@@ -72,16 +57,16 @@ int main() {
     FILE *file;
     Database myDatabase;
     myDatabase.numTables = 0;
-    char tableName[100] = "test1";
+    char tableName[100] = "test2";
     char line[100];
     char auxTableName[100];
     int op;
     
-    interface();
+    /*interface();
 
     scanf("%d", &op);
 
-    /*ListTable(myDatabase); // função pra ver as tabelas existentes
+    ListTable(myDatabase); // função pra ver as tabelas existentes
     
     for (int i = 0; i < myDatabase.numTables; i++) {
         free(myDatabase.tables[i]);
@@ -95,7 +80,8 @@ int main() {
     for (int i = 0; tableName[i]; i++) {
         tableName[i] = tolower(tableName[i]);
     }
-    
+    printDataFromTable(tableName);
+    /*
     switch (op)
     {
     case (op == 1):
@@ -106,7 +92,7 @@ int main() {
         break;
     default:
         break;
-    }
+    }*/
 
     return 0;
 }

@@ -3,21 +3,60 @@
 #include <string.h>
 #include <ctype.h>
 
+//funções auxiliares
+void cutOffEmptySpaces(char str[]) {
+    int len = strlen(str);
+
+    int i = 0;
+    //encontra onde começa os caracteres da string
+    while(i < len && isspace(str[i])) {
+        i++;
+    }
+
+    //encontra o final da minha string
+    int j = len;
+    while(j > i && isspace(str[j-1])) {
+        j--;
+    }
+
+    //move os caracteres para o inicio da sttring
+    int k;
+    for (k = 0; k < (j-i); k++) {
+        str[k] = str[i+k];
+    }
+
+    //addicona caracter nulo
+    str[k] = '\0';
+    
+}
+
+int registerTable(char tableName[]) {
+    FILE *file;
+
+    file = fopen("databases.txt", "a");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return 1;
+    }
+    fprintf(file, tableName);
+    fprintf(file, ";\n");
+
+    fclose(file);
+    return 0;
+}
+
 int create_table(int colQty, char **colTyp, char **colNames, char pkName[], char tableName[]) {
     FILE *file;
     
     //create file
         //making path process
-    //char target[1000] = "projeto-final/databases/";
-
-        //needs to be implemented cut_off_empty_espaces
     
+    cutOffEmptySpaces(tableName);
+
     char auxTableName[100];
     strcpy(auxTableName, tableName);
     strcat(auxTableName, ".txt");
-    //strcat(target, auxTableName);
 
-    //file = fopen(target, "w");
     file = fopen(auxTableName, "w");
 
     if (file == NULL) {
@@ -45,7 +84,10 @@ int create_table(int colQty, char **colTyp, char **colNames, char pkName[], char
         fprintf(file, "|");
     }
     fprintf(file,"\n");
-    return 0;
+    fclose(file);
+
+    int result = registerTable(tableName);
+    return result;
 }
 
 int main() {
@@ -60,7 +102,7 @@ int main() {
     v2[1] = strdup("password");
 
     char pk[] = "id";
-    char tname[100] = "test1";
+    char tname[100] = "  test1  ";
 
     create_table(len, v1, v2, pk, tname);
 
