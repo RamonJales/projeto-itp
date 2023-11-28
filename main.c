@@ -53,6 +53,40 @@ void printDataFromTable(const char *tableName) {
     fclose(file);
 }
 
+void deleteTable(Database *myDatabase, const char *tableName) {
+    int found = 0;
+    for (int i = 0; i < myDatabase->numTables; i++) {
+        if (strcmp(myDatabase->tables[i]->tableName, tableName) == 0) {
+            // Free the memory allocated for the table
+            free(myDatabase->tables[i]);
+            // Shift the remaining tables to fill the gap
+            for (int j = i; j < myDatabase->numTables - 1; j++) {
+                myDatabase->tables[j] = myDatabase->tables[j + 1];
+            }
+            myDatabase->numTables--;
+            found = 1;
+            printf("Tabela '%s' apagada com sucesso!\n", tableName);
+            break;
+        }
+    }
+    if (!found) {
+        printf("Tabela '%s' nao encontrada!\n", tableName);
+    }
+}
+
+void interface(){
+    printf("°---------------------------------------------------°\n");
+    printf("Escolha a opção: \n");
+    printf("1 - Criar tabela\n");
+    printf("2 - Listar as tabelas existentes\n");
+    printf("3 - Criar nova linha na tabela\n");
+    printf("4 - Listar os dados de uma tabela existente\n");
+    printf("5 - Achar um valor em uma tabela existente\n");
+    printf("6 - Apagar uma tupla de uma tabela\n");
+    printf("7 - Apagar uma tabela\n");
+    printf("°---------------------------------------------------°\n");
+}
+
 int main() {
     FILE *file;
     Database myDatabase;
@@ -62,37 +96,46 @@ int main() {
     char auxTableName[100];
     int op;
     
-    /*interface();
+    interface();
 
+    printf("Informe a opção escolhida: ");
     scanf("%d", &op);
 
-    ListTable(myDatabase); // função pra ver as tabelas existentes
-    
-    for (int i = 0; i < myDatabase.numTables; i++) {
-        free(myDatabase.tables[i]);
-    }
-
-    printf("Listagem completa!\n");
-
-    printf("Informe o nome da tabela: ");
-    scanf("%s", tableName);*/
-
-    for (int i = 0; tableName[i]; i++) {
-        tableName[i] = tolower(tableName[i]);
-    }
-    printDataFromTable(tableName);
-    /*
     switch (op)
     {
-    case (op == 1):
+    case (1): //CRIAR TABELA
         printf("Tabela");
         break;
-    case (op == 2):
-        pullDataFromTable(tableName);
+    case (2): //LISTAR TABELAS
+        listTable(myDatabase); // função pra ver as tabelas existentes
+        for (int i = 0; i < myDatabase.numTables; i++) {
+            free(myDatabase.tables[i]);
+        } 
+        printf("Listagem completa!\n");
         break;
-    default:
+    case (3): 
         break;
-    }*/
+    case (4)://PRINTAR OS DADOS DE UMA TABELA
+        printf("Informe o nome da tabela: ");
+        scanf("%s", auxTableName);
+        for (int i = 0; auxTableName[i]; i++) {
+            auxTableName[i] = tolower(auxTableName[i]);
+        }
+        printDataFromTable(tableName);
+        break;
+    case (5):
+        break;
+    case (6): 
+        break;
+    case (7)://APAGAR UMA TABELA
+        printf("Informe o nome da tabela a ser apagada: ");
+        scanf("%s", auxTableName);
+        for (int i = 0; auxTableName[i]; i++) {
+            auxTableName[i] = tolower(auxTableName[i]);
+        }
+        deleteTable(&myDatabase, auxTableName);
+        break;
+    }
 
     return 0;
 }
