@@ -4,6 +4,16 @@
 #include <ctype.h>
 
 //funções auxiliares
+int openFileError(FILE *file) {
+    if(file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
 void cutOffEmptySpaces(char str[]) {
     int len = strlen(str);
 
@@ -30,6 +40,31 @@ void cutOffEmptySpaces(char str[]) {
     
 }
 
+void extractStr(char *str, char *strDestiny, int position) {
+    int j = 0;
+    if(position < strlen(str)) {
+        while(str[position] != '\0') {
+            strDestiny[j] = str[position];
+            position++;
+            j++;
+        }
+    }
+    strDestiny[j] = '\0';
+}
+
+    //conta os caracteres válidos em uma string
+int countChar(char *str) {
+    int i = 0;
+    while(str[i] != '\0') {
+        i++;
+    }
+}
+
+void putStrSufix(char *str, char *sufix, char *destiny) {
+    strcpy(destiny, str);
+    strcat(destiny, sufix);
+}
+
 int registerTable(char tableName[]) {
     FILE *file;
 
@@ -39,12 +74,77 @@ int registerTable(char tableName[]) {
         return 1;
     }
     fprintf(file, tableName);
-    fprintf(file, ";\n");
+    fprintf(file, "\n");
 
     fclose(file);
     return 0;
 }
 
+char* getInformationFromRow(char *tableName, char *flag) {
+    FILE *file;
+    char row[1000];
+
+    //recuperar pk
+    char auxTableName[100];
+    putStrSufix(tableName, ".txt", auxTableName);
+
+    file = fopen(auxTableName, "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return "N";
+    }
+
+    //encontrar linha desejada
+    int len = strlen(flag);
+    while(fgets(row, sizeof(row), file) != NULL) {
+        int result = strncmp(flag, row, len);
+        if(result == 0) {
+            break;
+        }
+    }
+
+    char *information = (char*) malloc(100*sizeof(char));
+    extractStr(row, information, len+1);
+    fclose(file);
+
+    return information;
+}
+
+void updatePK(char *tableName, char *pk) {
+    FILE *file;
+    FILE *tmp;
+    char row[1000];
+
+    file = fopen(tableName, "r+");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+    }
+
+    tmp = fopen("tmp.txt", "w");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+    }
+
+    while(fgets(row, sizeof(row), file) != NULL) {
+        int result = strncmp("pk", row, 2);
+        if(result == 0) {
+            fprintf(tmp, "pk:");
+            fprintf(tmp, pk);
+            fprintf(tmp, "\n");
+        }
+        else {
+            fprintf(tmp, row);
+        }
+    }
+
+    remove(tableName);
+    rename("tmp.txt", tableName);
+
+    fclose(tmp);
+    fclose(file);
+}
+
+//funções do banco
 int create_table(int colQty, char **colTyp, char **colNames, char pkName[], char tableName[]) {
     FILE *file;
     
@@ -65,19 +165,25 @@ int create_table(int colQty, char **colTyp, char **colNames, char pkName[], char
     }
 
     //create content file
-        //header
-    char header[256] = "nome: ";
-    strcat(header, tableName);
-    fprintf(file, header);
+        //meta dados
+    fprintf(file, "nome:");
+    fprintf(file, tableName);
     fprintf(file, "\n");
-    
-        //primary key name
+
+    fprintf(file, "pk:");
+    fprintf(file, "0\n");
+
+    fprintf(file, "cols:");
+    char col[100];
+    sprintf(col, "%d", colQty);
+    fprintf(file, col);
+    fprintf(file, "\n");
+
     fprintf(file, pkName);
     fprintf(file, "|");
 
     //columns
-    for (int i = 0; i < colQty; i++)
-    {
+    for (int i = 0; i < colQty; i++) {
         fprintf(file, colNames[i]);
         fprintf(file, "-");
         fprintf(file, colTyp[i]);
@@ -90,27 +196,72 @@ int create_table(int colQty, char **colTyp, char **colNames, char pkName[], char
     return result;
 }
 
+int insert(char tableName[], char **colValues) {
+    FILE *file;
+    //recuperar pk
+    char pk[100];
+    strcpy(pk, getInformationFromRow(tableName, "pk"));
+    int pkInt = atoi(pk) + 1;
+    sprintf(pk, "%d", pkInt);
+
+    char auxTableName[100];
+    putStrSufix(tableName, ".txt", auxTableName);
+    file = fopen(auxTableName, "a");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return 1;
+    }
+
+    fprintf(file, pk);
+    fprintf(file, "|");
+    //adicionar os valores
+        //pega o número de colunas
+    char ncol[100];
+    strcpy(ncol, getInformationFromRow(tableName, "cols"));
+    int ncolInt = atoi(ncol);
+
+    for (int i = 0; i < ncolInt; i++) {
+        fprintf(file, colValues[i]);
+        fprintf(file, "|");
+    }
+    fprintf(file, ";\n");
+
+    fclose(file);
+
+    updatePK(auxTableName, pk);
+
+    return 0;
+}
+
 int main() {
     int len = 2;
 
-    char **v1 = (char**) malloc(len * sizeof(char *));
-    v1[0] = strdup("s");
-    v1[1] = strdup("s");
+    // char **v1 = (char**) malloc(len * sizeof(char *));
+    // v1[0] = strdup("s");
+    // v1[1] = strdup("s");
 
-    char **v2 = (char**) malloc(len * sizeof(char *));
-    v2[0] = strdup("name");
-    v2[1] = strdup("password");
+    // char **v2 = (char**) malloc(len * sizeof(char *));
+    // v2[0] = strdup("name");
+    // v2[1] = strdup("password");
 
-    char pk[] = "id";
-    char tname[100] = "  test1  ";
+    // char pk[] = "id";
+    char tname[100] = "test1";
 
-    create_table(len, v1, v2, pk, tname);
+    // create_table(len, v1, v2, pk, tname);
+
+    char **v3 = (char**) malloc(len * sizeof(char *));
+    v3[0] = strdup("ramon");
+    v3[1] = strdup("1234");
+    insert(tname, v3);
 
     for (int i = 0; i < len; i++) {
-        free(v1[i]);
-        free(v2[i]);
+        // free(v1[i]);
+        // free(v2[i]);
+        free(v3[i]);
     }
-    free(v1);
-    free(v2);
+
+    // free(v1);
+    // free(v2);
+    free(v3);
     return 0;
 }
