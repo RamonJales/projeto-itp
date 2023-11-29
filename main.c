@@ -3,29 +3,27 @@
 #include <string.h>
 #include <ctype.h>
 
-enum DataType {
-    CHAR,
-    INT,
-    FLOAT,
-    DOUBLE,
-    STRING,
-};
-
-typedef struct Table {
-    int tableId;
+void listTables() {
+    FILE *file;
     char tableName[100];
-} Table;
 
-typedef struct {
-    int numTables;
-    Table *tables[100];
-} Database;
-
-void listTable(Database myDatabase){
-    printf("Tabelas existentes:\n");
-    for(int i = 0; i < myDatabase.numTables; i++) {
-        printf("%s\n", myDatabase.tables[i]->tableName);
+    file = fopen("databases.txt", "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo de tabelas.\n");
+        return;
     }
+
+    printf("Tabelas existentes:\n");
+    while (fgets(tableName, sizeof(tableName), file) != NULL) {
+        // Remove o caractere de nova linha se estiver
+        size_t length = strlen(tableName);
+        if (tableName[length - 1] == '\n') {
+            tableName[length - 1] = '\0';
+        }
+        printf("- %s\n", tableName);
+    }
+
+    fclose(file);
 }
 
 void printDataFromTable(const char *tableName) {
@@ -53,32 +51,72 @@ void printDataFromTable(const char *tableName) {
     fclose(file);
 }
 
-void deleteTable(Database *myDatabase, const char *tableName) {
+void deleteTuple(char tableName[], char *primaryKey) {
+    FILE *file, *tmpFile;
+    char row[100];
     int found = 0;
-    for (int i = 0; i < myDatabase->numTables; i++) {
-        if (strcmp(myDatabase->tables[i]->tableName, tableName) == 0) {
-            free(myDatabase->tables[i]);
-            for (int j = i; j < myDatabase->numTables - 1; j++) {
-                myDatabase->tables[j] = myDatabase->tables[j + 1];
-            }
-            myDatabase->numTables--;
-            found = 1;
-            printf("Tabela '%s' apagada com sucesso!\n", tableName);
-            break;
-        }
+
+    char auxTableName[100];
+    putStrSufix(tableName, ".txt", auxTableName);
+
+    file = fopen(auxTableName, "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo da tabela \"%s\".\n", tableName);
+        return;
     }
+
+    tmpFile = fopen("temp.txt", "w");
+    if (tmpFile == NULL) {
+        printf("Erro ao criar arquivo temporário.\n");
+        fclose(file);
+        return;
+    }
+
+    while (fgets(row, sizeof(row), file) != NULL) {
+        char *token = strtok(row, "|");
+        if (strcmp(token, primaryKey) == 0) {
+            found = 1;
+            continue; // corresponde a tupla a ser apagada
+        }
+        fprintf(tmpFile, "%s", row); 
+    }
+
+    fclose(file);
+    fclose(tmpFile);
+
     if (!found) {
-        printf("Tabela '%s' nao encontrada!\n", tableName);
+        printf("Chave primária \"%s\" não encontrada na tabela \"%s\".\n", primaryKey, tableName);
+        remove("temp.txt"); 
+        return;
+    }
+
+    remove(auxTableName); 
+    rename("temp.txt", auxTableName); 
+
+    printf("Tupla com a chave primária \"%s\" removida com sucesso da tabela \"%s\".\n", primaryKey, tableName);
+}
+
+void deleteTable(const char *tableName) {
+    // Create file path
+    char filePath[100];
+    strcpy(filePath, tableName);
+    strcat(filePath, ".txt");
+
+    if (remove(filePath) == 0) {
+        printf("Tabela \"%s\" removida com sucesso.\n", tableName);
+    } else {
+        printf("Erro ao remover a tabela \"%s\".\n", tableName);
     }
 }
 
+
 int main() {
     FILE *file;
-    Database myDatabase;
-    myDatabase.numTables = 0;
+
     char tableName[100] = "test2";
     char line[100];
-    char auxTableName[100];
+    char auxtableName[100];
+    char primaryKey;
     int op;
     
     interface();
@@ -89,36 +127,48 @@ int main() {
     switch (op)
     {
     case (1): //CRIAR TABELA
+      /*printf("Informe a quantidade de colunas: ");
+      printf("Informe o tipo(?) da coluna: ");
+      printf("Informe o nome da tabela: ");
+      printf("Informe o nome da tabela: ");
+      printf("Informe o nome da tabela: ");
+        
+      create_table(int colQty, char **colTyp, char **colNames, char pkName[], char tableName[])
+        create_table(len, v1, v2, pk, tname);*/
         printf("Tabela");
         break;
     case (2): //LISTAR TABELAS
-        listTable(myDatabase);
-        for (int i = 0; i < myDatabase.numTables; i++) {
-            free(myDatabase.tables[i]);
-        } 
-        printf("Listagem completa!\n");
+        listTables();
         break;
     case (3): 
         break;
     case (4)://PRINTAR OS DADOS DE UMA TABELA
         printf("Informe o nome da tabela: ");
-        scanf("%s", auxTableName);
-        for (int i = 0; auxTableName[i]; i++) {
-            auxTableName[i] = tolower(auxTableName[i]);
+        scanf("%s", &tableName);
+        for (int i = 0; tableName[i]; i++) {
+            tableName[i] = tolower(tableName[i]);
         }
         printDataFromTable(tableName);
         break;
     case (5):
         break;
-    case (6): 
-        break;
-    case (7)://APAGAR UMA TABELA
-        printf("Informe o nome da tabela a ser apagada: ");
-        scanf("%s", auxTableName);
-        for (int i = 0; auxTableName[i]; i++) {
-            auxTableName[i] = tolower(auxTableName[i]);
+    case (6): // APAGAR UMA TUPLA
+        printf("Informe o nome da tabela: ");
+        scanf("%s", tableName);
+        printf("Informe a chave primária da tupla a ser apagada: ");
+        scanf("%s", primaryKey);
+        for (int i = 0; tableName[i]; i++) {
+            tableName[i] = tolower(tableName[i]);
         }
-        deleteTable(&myDatabase, auxTableName);
+        deleteTuple(tableName, &primaryKey);
+        break;
+    case (7): // APAGAR UMA TABELA
+        printf("Informe o nome da tabela a ser apagada: ");
+        scanf("%s", tableName);
+        for (int i = 0; tableName[i]; i++) {
+            tableName[i] = tolower(tableName[i]);
+        }
+        deleteTable(tableName);
         break;
     }
 
