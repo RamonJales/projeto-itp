@@ -55,6 +55,29 @@ int create_table(int colQty, char **colNames, char pkName[], char tableName[]) {
     return result;
 }
 
+void listTables() {
+    FILE *file;
+    char tableName[100];
+
+    file = fopen("databases.txt", "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo de tabelas.\n");
+        return;
+    }
+
+    printf("Tabelas existentes:\n");
+    while (fgets(tableName, sizeof(tableName), file) != NULL) {
+        // Remove o caractere de nova linha se estiver
+        size_t length = strlen(tableName);
+        if (tableName[length - 1] == '\n') {
+            tableName[length - 1] = '\0';
+        }
+        printf("- %s\n", tableName);
+    }
+
+    fclose(file);
+}
+
 int insert(char tableName[], char **colValues) {
     FILE *file;
     //recuperar pk
@@ -92,49 +115,88 @@ int insert(char tableName[], char **colValues) {
     return 0;
 }
 
-// void deleteTuple(char tableName[], char *primaryKey) {
-//     FILE *file, *tmpFile;
-//     char row[100];
-//     int found = 0;
+void printDataFromTable(const char *tableName) {
+    FILE *file;
+    char filename[100];
+    char line[100];
 
-//     char auxTableName[100];
-//     putStrSufix(tableName, ".txt", auxTableName);
+    strcpy(filename, tableName);
+    strcat(filename, ".itp");
 
-//     file = fopen(auxTableName, "r");
-//     if (file == NULL) {
-//         printf("Erro ao abrir o arquivo da tabela \"%s\".\n", tableName);
-//         return;
-//     }
+    file = fopen(filename, "r");
 
-//     tmpFile = fopen("temp.txt", "w");
-//     if (tmpFile == NULL) {
-//         printf("Erro ao criar arquivo temporário.\n");
-//         fclose(file);
-//         return;
-//     }
+    if (file == NULL) {
+        printf("Error ao abrir a tabela ou o arquivo nao existe!\n");
+        return;
+    }
 
-//     while (fgets(row, sizeof(row), file) != NULL) {
-//         char *token = strtok(row, "|");
-//         if (strcmp(token, primaryKey) == 0) {
-//             found = 1;
-//             continue; // corresponde a tupla a ser apagada
-//         }
-//         fprintf(tmpFile, "%s", row); 
-//     }
+    printf("Dados da tabela'%s':\n", tableName);
 
-//     fclose(file);
-//     fclose(tmpFile);
+    while (fgets(line, sizeof(line), file) != NULL) {
+        printf("%s", line);
+    }
 
-//     if (!found) {
-//         printf("Chave primária \"%s\" não encontrada na tabela \"%s\".\n", primaryKey, tableName);
-//         remove("temp.txt"); 
-//         return;
-//     }
+    fclose(file);
+}
 
-//     remove(auxTableName); 
-//     rename("temp.txt", auxTableName); 
+ void deleteTuple(char tableName[], char *primaryKey) {
+    FILE *file, *tmpFile;
+    char row[100];
+    int found = 0;
 
-//     printf("Tupla com a chave primária \"%s\" removida com sucesso da tabela \"%s\".\n", primaryKey, tableName);
-// }
+    char auxTableName[100];
+    putStrSufix(tableName, ".txt", auxTableName);
+
+    file = fopen(auxTableName, "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo da tabela \"%s\".\n", tableName);
+        return;
+    }
+
+    tmpFile = fopen("temp.txt", "w");
+    if (tmpFile == NULL) {
+        printf("Erro ao criar arquivo temporário.\n");
+        fclose(file);
+        return;
+    }
+
+    int len = strlen(primaryKey);
+    while(fgets(row, sizeof(row), file) != NULL) {
+        int result = strncmp(primaryKey, row, len);
+        if (result != 0) {
+            fputs(row, tmpFile);
+        } else {
+            found = 1; 
+        }
+    }
+
+    fclose(file);
+    fclose(tmpFile);
+
+    if (!found) {
+        printf("Chave primária \"%s\" não encontrada na tabela \"%s\".\n", primaryKey, tableName);
+        remove("temp.txt"); 
+        return;
+    }
+
+    remove(auxTableName); 
+    rename("temp.txt", auxTableName); 
+
+    printf("Tupla com a chave primária \"%s\" removida com sucesso da tabela \"%s\".\n", primaryKey, tableName);
+}
+
+void deleteTable(const char *tableName) {
+    // Create file path
+    char filePath[100];
+    strcpy(filePath, tableName);
+    strcat(filePath, ".txt");
+
+    if (remove(filePath) == 0) {
+        printf("Tabela \"%s\" removida com sucesso.\n", tableName);
+    } else {
+        printf("Erro ao remover a tabela \"%s\".\n", tableName);
+    }
+}
+
 
 

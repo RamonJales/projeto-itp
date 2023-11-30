@@ -3,67 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 
-void listTables() {
-    FILE *file;
-    char tableName[100];
-
-    file = fopen("databases.txt", "r");
-    if (file == NULL) {
-        printf("Erro ao abrir o arquivo de tabelas.\n");
-        return;
-    }
-
-    printf("Tabelas existentes:\n");
-    while (fgets(tableName, sizeof(tableName), file) != NULL) {
-        // Remove o caractere de nova linha se estiver
-        size_t length = strlen(tableName);
-        if (tableName[length - 1] == '\n') {
-            tableName[length - 1] = '\0';
-        }
-        printf("- %s\n", tableName);
-    }
-
-    fclose(file);
-}
-
-void printDataFromTable(const char *tableName) {
-    FILE *file;
-    char filename[100];
-    char line[100];
-
-    strcpy(filename, tableName);
-    strcat(filename, ".itp");
-
-    file = fopen(filename, "r");
-
-    if (file == NULL) {
-        printf("Error ao abrir a tabela ou o arquivo nao existe!\n");
-        return;
-    }
-
-    printf("Dados da tabela'%s':\n", tableName);
-
-    while (fgets(line, sizeof(line), file) != NULL) {
-        printf("%s", line);
-    }
-
-    fclose(file);
-}
-
-void deleteTable(const char *tableName) {
-    // Create file path
-    char filePath[100];
-    strcpy(filePath, tableName);
-    strcat(filePath, ".txt");
-
-    if (remove(filePath) == 0) {
-        printf("Tabela \"%s\" removida com sucesso.\n", tableName);
-    } else {
-        printf("Erro ao remover a tabela \"%s\".\n", tableName);
-    }
-}
-
-
 int main() {
     FILE *file;
 
