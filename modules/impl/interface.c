@@ -1,6 +1,7 @@
+#include "interface.h"
 #include <stdio.h>
 
-void interface(){
+void interface() {
     printf("°---------------------------------------------------°\n");
     printf("Escolha a opção: \n");
     printf("1 - Criar tabela\n");

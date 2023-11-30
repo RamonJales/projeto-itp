@@ -50,51 +50,6 @@ void printDataFromTable(const char *tableName) {
     fclose(file);
 }
 
-void deleteTuple(char tableName[], char *primaryKey) {
-    FILE *file, *tmpFile;
-    char row[100];
-    int found = 0;
-
-    char auxTableName[100];
-    putStrSufix(tableName, ".txt", auxTableName);
-
-    file = fopen(auxTableName, "r");
-    if (file == NULL) {
-        printf("Erro ao abrir o arquivo da tabela \"%s\".\n", tableName);
-        return;
-    }
-
-    tmpFile = fopen("temp.txt", "w");
-    if (tmpFile == NULL) {
-        printf("Erro ao criar arquivo temporário.\n");
-        fclose(file);
-        return;
-    }
-
-    while (fgets(row, sizeof(row), file) != NULL) {
-        char *token = strtok(row, "|");
-        if (strcmp(token, primaryKey) == 0) {
-            found = 1;
-            continue; // corresponde a tupla a ser apagada
-        }
-        fprintf(tmpFile, "%s", row); 
-    }
-
-    fclose(file);
-    fclose(tmpFile);
-
-    if (!found) {
-        printf("Chave primária \"%s\" não encontrada na tabela \"%s\".\n", primaryKey, tableName);
-        remove("temp.txt"); 
-        return;
-    }
-
-    remove(auxTableName); 
-    rename("temp.txt", auxTableName); 
-
-    printf("Tupla com a chave primária \"%s\" removida com sucesso da tabela \"%s\".\n", primaryKey, tableName);
-}
-
 void deleteTable(const char *tableName) {
     // Create file path
     char filePath[100];
