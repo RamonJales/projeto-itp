@@ -197,6 +197,3 @@ void deleteTable(const char *tableName) {
         printf("Erro ao remover a tabela \"%s\".\n", tableName);
     }
 }
-
-
-
