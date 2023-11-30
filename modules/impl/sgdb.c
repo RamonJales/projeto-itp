@@ -6,17 +6,15 @@
 #include <string.h>
 
 //funções do banco
-int create_table(int colQty, char **colNames, char pkName[], char tableName[]) {
+int create_table(int colQty, char **colNames, char *pkName, char *tableName) {
     FILE *file;
     
     //create file
-        //making path process
     
-    cutOffEmptySpaces(tableName);
-
+    /*o processo de colocar o sufixo .txt está nessa função pelo fato de precisarmos do nome original.
+    De qualquer modo iríamos ter que retirar esse fufixo.*/
     char auxTableName[100];
-    strcpy(auxTableName, tableName);
-    strcat(auxTableName, ".txt");
+    putStrSufix(tableName, ".txt", auxTableName);
 
     file = fopen(auxTableName, "w");
 

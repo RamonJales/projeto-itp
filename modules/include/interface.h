@@ -3,4 +3,6 @@
 
 void interface();
 
+void interfaceCreateTable(int *colQty, char **colNames, char *pkName, char *tableName);
+
 #endif

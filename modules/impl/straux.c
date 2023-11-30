@@ -54,3 +54,37 @@ void putStrSufix(char *str, char *sufix, char *destiny) {
     strcpy(destiny, str);
     strcat(destiny, sufix);
 }
+
+void removeCharFromString(char *str, char ch) {
+    int len = strlen(str);
+    char tmpStr[len];
+    int i = 0;
+    int j = 0;
+
+    for (int i = 0; i < len; i++) {
+        if(str[i] != ch) {
+            tmpStr[j] = str[i];
+            j++;  
+        }
+    }
+    
+    tmpStr[j] = '\0';
+    strcpy(str, tmpStr);
+}
+
+void removeNumberFromStrInit(char *str) {
+    int len = strlen(str);
+    char tmpStr[len];
+    int i = 0;
+    int j = 0;
+
+    for (int i = 0; i < len; i++) {
+        if(isdigit(str[i]) == 0) {
+            tmpStr[j] = str[i];
+            j++;  
+        }
+    }
+
+    tmpStr[j] = '\0';
+    strcpy(str, tmpStr);
+}

@@ -9,4 +9,8 @@ int countChar(char *str);
 
 void putStrSufix(char *str, char *sufix, char *destiny);
 
+void removeCharFromString(char *str, char ch);
+
+void removeNumberFromStrInit(char *str);
+
 #endif
