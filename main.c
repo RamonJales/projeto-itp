@@ -44,7 +44,6 @@ void printDataFromTable(const char *tableName) {
     printf("Dados da tabela'%s':\n", tableName);
 
     while (fgets(line, sizeof(line), file) != NULL) {
-        //não sei, alguma coisa vai disponibilizar
         printf("%s", line);
     }
 
