@@ -19,7 +19,7 @@ int main() {
     switch (op) {
         case (1): //CRIAR TABELA
             int colQty;
-            char **colNames;
+            char **colNames = (char**) malloc(sizeof(char *));
             char pkName[MAX_PK_NAME];
             char tableName[MAX_TABLE_NAME];
 

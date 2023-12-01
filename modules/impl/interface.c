@@ -31,7 +31,7 @@ void interfaceCreateTable(int *colQty, char **colNames, char *pkName, char *tabl
     printf("Informe a quantidade de colunas: ");
     result = scanf("%d", colQty);
 
-    colNames = (char**) malloc((*colQty) * sizeof(char *));
+    colNames = (char**) realloc(colNames, (*colQty) * sizeof(char *));
 
     //input do nome da coluna pk
     printf("Informe o nome da chave primária: ");

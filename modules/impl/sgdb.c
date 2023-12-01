@@ -9,8 +9,7 @@
 int create_table(int colQty, char **colNames, char *pkName, char *tableName) {
     FILE *file;
     
-    //create file
-    
+    //create file    
     /*o processo de colocar o sufixo .txt está nessa função pelo fato de precisarmos do nome original.
     De qualquer modo iríamos ter que retirar esse fufixo.*/
     char auxTableName[100];
