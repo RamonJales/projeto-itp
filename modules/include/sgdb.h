@@ -9,6 +9,8 @@ int insert(char tableName[], char **colValues);
 
 void printDataFromTable(const char *tableName);
 
+void searchDataFromTable(char tableName[]); 
+
 void deleteTuple(char tableName[], char *primaryKey);
 
 void deleteTable(const char *tableName);

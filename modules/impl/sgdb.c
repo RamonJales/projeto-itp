@@ -136,7 +136,77 @@ void printDataFromTable(const char *tableName) {
     fclose(file);
 }
 
- void deleteTuple(char tableName[], char *primaryKey) {
+void searchDataFromTable(char tableName[]) {
+    FILE *file;
+    char colNames[100][100]; // Matriz para armazenar nomes das colunas
+    int colQty;
+    char searchColName[100];
+    char searchValue[100];
+    int searchOption;
+    char line[100];
+
+    char filename[100];
+    strcpy(filename, tableName);
+    strcat(filename, ".txt");
+    file = fopen(filename, "r");
+
+    if (file == NULL) {
+        printf("Erro ao abrir a tabela \"%s\".\n", tableName);
+        return;
+    }
+
+    fgets(line, sizeof(line), file); // Ignorar a linha com "nome:tableName"
+    fgets(line, sizeof(line), file); // Ignorar a linha com "pk:0"
+    fgets(line, sizeof(line), file); // Ignorar a linha com "cols:colQty"
+    colQty = atoi(strchr(line, ':') + 1); // Extrair a quantidade de colunas
+
+    for (int i = 0; i <= colQty; i++) {
+        fscanf(file, "%[^|]|", colNames[i]); // Ler o nome de cada coluna
+    }
+    fscanf(file, "\n"); // Ler a quebra de linha
+
+    // Mostrar colunas disponíveis
+    printf("Colunas disponíveis na tabela '%s':\n", tableName);
+    for (int i = 1; i <= colQty; i++) {
+        printf("%d. %s\n", i, colNames[i]);
+    }
+
+    // Solicitar ao usuário a seleção da coluna
+    printf("Selecione o número da coluna para pesquisar: ");
+    int selectedCol;
+    scanf("%d", &selectedCol);
+
+    if (selectedCol < 1 || selectedCol > colQty) {
+        printf("Seleção de coluna inválida.\n");
+        fclose(file);
+        return;
+    }
+
+    strcpy(searchColName, colNames[selectedCol]);
+
+    // Solicitar ao usuário o valor a ser pesquisado
+    printf("Digite o valor para pesquisar na coluna '%s': ", searchColName);
+    scanf("%s", searchValue);
+
+    // Solicitar a opção de pesquisa
+    printf("Opções de pesquisa:\n");
+    printf("1. Valores maior que '%s'\n", searchValue);
+    printf("2. Valores maior ou igual a '%s'\n", searchValue);
+    printf("3. Valores igual a '%s'\n", searchValue);
+    printf("4. Valores menor que '%s'\n", searchValue);
+    printf("5. Valores menor ou igual a '%s'\n", searchValue);
+    printf("6. Valores próximos a '%s' (apenas para colunas do tipo string)\n", searchValue);
+    printf("Escolha a opção de pesquisa: ");
+    scanf("%d", &searchOption);
+
+    printf("Resultados da pesquisa na coluna '%s':\n", searchColName);
+
+    // ATUALIZAR SWITCH 
+    
+    fclose(file);
+}
+
+void deleteTuple(char tableName[], char *primaryKey) {
     FILE *file, *tmpFile;
     char row[100];
     int found = 0;
