@@ -158,20 +158,18 @@ void searchDataFromTable(char tableName[]) {
     fgets(line, sizeof(line), file); // Ignorar a linha com "nome:tableName"
     fgets(line, sizeof(line), file); // Ignorar a linha com "pk:0"
     fgets(line, sizeof(line), file); // Ignorar a linha com "cols:colQty"
-    colQty = atoi(strchr(line, ':') + 1); // Extrair a quantidade de colunas
+    colQty = atoi(strchr(line, ':') + 1); 
 
     for (int i = 0; i <= colQty; i++) {
-        fscanf(file, "%[^|]|", colNames[i]); // Ler o nome de cada coluna
+        fscanf(file, "%[^|]|", colNames[i]); 
     }
-    fscanf(file, "\n"); // Ler a quebra de linha
+    fscanf(file, "\n"); 
 
-    // Mostrar colunas disponíveis
     printf("Colunas disponíveis na tabela '%s':\n", tableName);
     for (int i = 1; i <= colQty; i++) {
         printf("%d. %s\n", i, colNames[i]);
     }
 
-    // Solicitar ao usuário a seleção da coluna
     printf("Selecione o número da coluna para pesquisar: ");
     int selectedCol;
     scanf("%d", &selectedCol);
@@ -184,11 +182,9 @@ void searchDataFromTable(char tableName[]) {
 
     strcpy(searchColName, colNames[selectedCol]);
 
-    // Solicitar ao usuário o valor a ser pesquisado
     printf("Digite o valor para pesquisar na coluna '%s': ", searchColName);
     scanf("%s", searchValue);
 
-    // Solicitar a opção de pesquisa
     printf("Opções de pesquisa:\n");
     printf("1. Valores maior que '%s'\n", searchValue);
     printf("2. Valores maior ou igual a '%s'\n", searchValue);
@@ -202,7 +198,7 @@ void searchDataFromTable(char tableName[]) {
     printf("Resultados da pesquisa na coluna '%s':\n", searchColName);
 
     // ATUALIZAR SWITCH 
-    
+
     fclose(file);
 }
 
