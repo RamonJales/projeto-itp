@@ -32,6 +32,7 @@ void interfaceCreateTable(int *colQty, char *colTyp, char **colNames, char *pkNa
     result = scanf("%d", colQty);
 
     colNames = (char**) realloc(colNames, (*colQty) * sizeof(char *));
+    colTyp = (char*) realloc(colTyp, (*colQty) * sizeof(char));
 
     //input do nome da coluna pk
     printf("Informe o nome da chave primária: ");
@@ -47,8 +48,10 @@ void interfaceCreateTable(int *colQty, char *colTyp, char **colNames, char *pkNa
         char tmpName[MAX_COLUMN_NAME];
         scanf("%s", tmpName);
         colNames[i] = strdup(tmpName);
-        
         cutOffEmptySpaces(colNames[i]);
         removeCharFromString(colNames[i], '|');
+
+        printf("Informe o tipo da coluna %d: ", i+1);
+        scanf(" %c",colTyp[i]);
     }
 }
