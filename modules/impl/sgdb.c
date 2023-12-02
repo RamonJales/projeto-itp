@@ -44,7 +44,10 @@ int create_table(int colQty, char *colTyp, char **colNames, char *pkName, char *
     for (int i = 0; i < colQty; i++) {
         fprintf(file, colNames[i]);
         fprintf(file, "-");
-        fprintf(file, colTyp[i]);
+        char strChar[2];
+        strChar[0] = colTyp[i];
+        strChar[1] = '\0';
+        fprintf(file, strChar);
         fprintf(file, "|");
     }
     fprintf(file,"\n");
