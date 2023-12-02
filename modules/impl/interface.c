@@ -19,7 +19,7 @@ void interface() {
     printf("°---------------------------------------------------°\n");
 }
 
-void interfaceCreateTable(int *colQty, char **colNames, char *pkName, char *tableName) {
+void interfaceCreateTable(int *colQty, char *colTyp, char **colNames, char *pkName, char *tableName) {
     int result;
 
     // input do nome da tabela

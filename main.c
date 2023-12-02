@@ -20,12 +20,13 @@ int main() {
         case (1): //CRIAR TABELA
             int colQty;
             char **colNames = (char**) malloc(sizeof(char *));
+            char *colTyp = (char*) malloc(sizeof(char));
             char pkName[MAX_PK_NAME];
             char tableName[MAX_TABLE_NAME];
 
-            interfaceCreateTable(&colQty, colNames, pkName, tableName);      
+            interfaceCreateTable(&colQty, colTyp, colNames, pkName, tableName);      
 
-            create_table(colQty, colNames, pkName, tableName);
+            create_table(colQty, colTyp, colNames, pkName, tableName);
 
             free(colNames);
 

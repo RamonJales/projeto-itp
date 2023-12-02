@@ -6,7 +6,7 @@
 #include <string.h>
 
 //funções do banco
-int create_table(int colQty, char **colNames, char *pkName, char *tableName) {
+int create_table(int colQty, char *colTyp, char **colNames, char *pkName, char *tableName) {
     FILE *file;
     
     //create file    
@@ -43,6 +43,8 @@ int create_table(int colQty, char **colNames, char *pkName, char *tableName) {
     //columns
     for (int i = 0; i < colQty; i++) {
         fprintf(file, colNames[i]);
+        fprintf(file, "-");
+        fprintf(file, colTyp[i]);
         fprintf(file, "|");
     }
     fprintf(file,"\n");
@@ -75,7 +77,7 @@ void listTables() {
     fclose(file);
 }
 
-int insert(char tableName[], char **colValues) {
+int insert(char *tableName, char **colValues) {
     FILE *file;
     //recuperar pk
     char pk[100];
@@ -136,7 +138,7 @@ void printDataFromTable(const char *tableName) {
     fclose(file);
 }
 
-void searchDataFromTable(char tableName[]) {
+void searchDataFromTable(char *tableName) {
     FILE *file;
     char colNames[100][100]; // Matriz para armazenar nomes das colunas
     int colQty;
@@ -146,8 +148,8 @@ void searchDataFromTable(char tableName[]) {
     char line[100];
 
     char filename[100];
-    strcpy(filename, tableName);
-    strcat(filename, ".txt");
+    putStrSufix(tableName, ".txt", filename);
+    
     file = fopen(filename, "r");
 
     if (file == NULL) {
@@ -202,7 +204,7 @@ void searchDataFromTable(char tableName[]) {
     fclose(file);
 }
 
-void deleteTuple(char tableName[], char *primaryKey) {
+void deleteTuple(char *tableName, char *primaryKey) {
     FILE *file, *tmpFile;
     char row[100];
     int found = 0;
