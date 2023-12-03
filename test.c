@@ -4,6 +4,11 @@
 #include "sgdb.h"
 
 int main() {
+    FILE *file;
+    char colNames[100][100];
+    int colQty = 2;
+    char line[100];
+    char colValues[100][100];
     // int len = 2;
 
     // // char **v1 = (char**) malloc(len * sizeof(char *));
@@ -36,6 +41,33 @@ int main() {
 
     //deleteTuple(tname, "2");
 
-    searchDataFromTable("test1"); 
-    return 0;
+    //searchDataFromTable("test1");
+
+    file = fopen("test1.txt", "r");
+
+    fgets(line, sizeof(line), file);
+    fgets(line, sizeof(line), file);
+    fgets(line, sizeof(line), file);
+    fgets(line, sizeof(line), file);
+    int i = 0;
+    while (fgets(line, sizeof(line), file) != NULL) {
+        char auxLine[1000];
+        strcpy(auxLine, line);
+        for (int i = 0; i < 1; i++) {
+            strcpy(auxLine, strchr(auxLine, '|') + 1);
+        }
+
+        //falta deletar os caracteres restantes da string
+        //se vc escolheu a coluna 1:
+        //name|password|
+        //deletar: |password|
+
+        strcpy(colValues[i], auxLine);
+        i++;
+    }
+
+    for (int i = 0; i < 3; i++) {
+        printf("%s", colValues[i]);
+        printf("\n");
+    }
 }

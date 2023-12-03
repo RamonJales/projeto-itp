@@ -149,17 +149,20 @@ void searchDataFromTable(char *tableName) {
     char searchValue[100];
     int searchOption;
     char line[100];
+    char colValues[100][100];
+    char colType;
 
-    char filename[100];
-    putStrSufix(tableName, ".txt", filename);
+    char auxTableName[100];
+    putStrSufix(tableName, ".txt", auxTableName);
     
-    file = fopen(filename, "r");
+    file = fopen(auxTableName, "r");
 
     if (file == NULL) {
         printf("Erro ao abrir a tabela \"%s\".\n", tableName);
         return;
     }
 
+    //pega o nome das colunas(exceto a do pk) e coloca no vetor
     fgets(line, sizeof(line), file); // Ignorar a linha com "nome:tableName"
     fgets(line, sizeof(line), file); // Ignorar a linha com "pk:0"
     fgets(line, sizeof(line), file); // Ignorar a linha com "cols:colQty"
@@ -168,26 +171,50 @@ void searchDataFromTable(char *tableName) {
     for (int i = 0; i <= colQty; i++) {
         fscanf(file, "%[^|]|", colNames[i]); 
     }
-    fscanf(file, "\n"); 
+    fscanf(file, "\n");
 
+    //falta retirar o "-type" do nome da coluna e colocar o tipo em um outro vetor
+
+    //imprime o nome das colunas
     printf("Colunas disponíveis na tabela '%s':\n", tableName);
     for (int i = 1; i <= colQty; i++) {
         printf("%d. %s\n", i, colNames[i]);
     }
 
+    //selecionar a coluna
     printf("Selecione o número da coluna para pesquisar: ");
+    //colunas começam de 1(a pk é a 0, mas ela não é printada)
     int selectedCol;
     scanf("%d", &selectedCol);
 
+    //tratamento de erro do input
     if (selectedCol < 1 || selectedCol > colQty) {
         printf("Seleção de coluna inválida.\n");
         fclose(file);
         return;
     }
 
-    strcpy(searchColName, colNames[selectedCol]);
+    //pegar valores das colunas
+        //varre as linhas
+    int j = 0;
+    while (fgets(line, sizeof(line), file) != NULL) {
+        char auxLine[1000];
+        //Na linha em que ele estiver, ele pega a informação apenas da coluna selecionadas 
+            //varre as colunas
+        for(int i = 0; i< selectedCol; i++) {
+            strcpy(auxLine, strchr(line, '|') + 1);
+        }
 
-    printf("Digite o valor para pesquisar na coluna '%s': ", searchColName);
+        //falta deletar os caracteres restantes da string
+        //se vc escolheu a coluna 1:
+        //name|password|
+        //deletar: |password|
+
+        strcpy(colValues[j], auxLine);
+        j++;
+    }
+
+    printf("Digite o valor para pesquisar na coluna '%s': ", colNames[selectedCol]);
     scanf("%s", searchValue);
 
     printf("Opções de pesquisa:\n");
@@ -197,12 +224,98 @@ void searchDataFromTable(char *tableName) {
     printf("4. Valores menor que '%s'\n", searchValue);
     printf("5. Valores menor ou igual a '%s'\n", searchValue);
     printf("6. Valores próximos a '%s' (apenas para colunas do tipo string)\n", searchValue);
+    
     printf("Escolha a opção de pesquisa: ");
     scanf("%d", &searchOption);
 
     printf("Resultados da pesquisa na coluna '%s':\n", searchColName);
 
-    // ATUALIZAR SWITCH 
+    // ATUALIZAR SWITCH
+    switch (searchOption) {
+    case(1) :
+        for (int i = 0; i < j; i++) {
+            //deve haver uma verificação para saber qual é o tipo da coluna
+            //tipo int
+            if(colType == 'i') {
+                //transformar o valor para inteiro
+                int intColVal = atoi(colValues[i]);
+                int intSearchVal = atoi(searchValue);
+                //verificação
+                if(intColVal > intSearchVal) {
+                    printf("%d\n", intColVal);
+                }
+            }
+            //tipo float
+            if(colType == 'f') {
+                //transformar o valor para float
+
+                //verificação
+                if() {
+
+                }
+            }
+            //tipo double 
+            if(colType == 'd') {
+                //transformar o valor para double
+
+                //verificação
+                if() {
+                    
+                }
+            }
+            //tipo char 
+            if(colType == 'c') {
+                //transformar o valor para char
+
+                //verificação
+                if() {
+                    
+                }
+            }
+            //tipo string 
+            if(colType == 's') {
+                //transformar o valor para string
+
+                //verificação
+                if() {
+                    
+                }
+            }
+        }
+        break;
+    case(2):
+        for (int i = 0; i < j; i++) {
+            //tipo int
+            if() {
+
+            }
+            //tipo float
+            if() {
+
+            }
+            //tipo double 
+            if() {
+
+            }
+            //tipo char 
+            if() {
+
+            }
+            //tipo string 
+            if() {
+
+            }
+        }
+        break;
+    case(3) :
+        break;
+    case(4):
+        break;
+    case(5) :
+        break;
+    case(6):
+        break;
+    }
 
     fclose(file);
 }
