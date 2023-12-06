@@ -45,29 +45,19 @@ int main() {
 
     file = fopen("test1.txt", "r");
 
-    fgets(line, sizeof(line), file);
-    fgets(line, sizeof(line), file);
-    fgets(line, sizeof(line), file);
-    fgets(line, sizeof(line), file);
-    int i = 0;
-    while (fgets(line, sizeof(line), file) != NULL) {
-        char auxLine[1000];
-        strcpy(auxLine, line);
-        for (int i = 0; i < 1; i++) {
-            strcpy(auxLine, strchr(auxLine, '|') + 1);
-        }
+    fgets(line, sizeof(line), file); // Ignorar a linha com "nome:tableName"
+    fgets(line, sizeof(line), file); // Ignorar a linha com "pk:0"
+    fgets(line, sizeof(line), file); // Ignorar a linha com "cols:colQty"
+    colQty = atoi(strchr(line, ':') + 1); 
 
-        //falta deletar os caracteres restantes da string
-        //se vc escolheu a coluna 1:
-        //name|password|
-        //deletar: |password|
-
-        strcpy(colValues[i], auxLine);
-        i++;
+    for (int i = 0; i <= colQty; i++) {
+        fscanf(file, "%[^|]|", colNames[i]); 
     }
+    fscanf(file, "\n");
 
-    for (int i = 0; i < 3; i++) {
-        printf("%s", colValues[i]);
-        printf("\n");
+    for (int i = 0; i < colQty; i++)
+    {
+        printf("%s", colNames[i]);
     }
+    
 }

@@ -28,7 +28,13 @@ int main() {
 
             create_table(colQty, colTyp, colNames, pkName, tableName);
 
+            for (int i = 0; i < colQty; i++) {
+                free(colNames[i]);
+                free(colTyp[i]);
+            }
+            
             free(colNames);
+            free(colTyp);
 
             break;
         case (2): //LISTAR TABELAS

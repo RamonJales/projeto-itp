@@ -42,6 +42,23 @@ void extractStr(char *str, char *strDestiny, int position) {
     strDestiny[j] = '\0';
 }
 
+void cutStrUntilFirstOccurrence(char *destiny, char *origin, char flag) {
+    // Encontrar a posição do caractere na string original
+    char *position = strchr(origin, flag);
+
+    if (position != NULL) {
+        // Calcular o comprimento da substring até o caractere
+        int comprimento = position - origin;
+
+        // Copiar a substring para o destino
+        strncpy(destiny, origin, comprimento);
+        destiny[comprimento] = '\0'; // Adicionar o caractere nulo no final
+    } else {
+        // Se o caractere não for encontrado, copiar toda a string original
+        strcpy(destiny, origin);
+    }
+}
+
 //conta os caracteres válidos em uma string
 int countChar(char *str) {
     int i = 0;

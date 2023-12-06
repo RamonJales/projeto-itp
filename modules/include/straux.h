@@ -13,4 +13,6 @@ void removeCharFromString(char *str, char ch);
 
 void removeNumberFromStrInit(char *str);
 
+void cutStrUntilFirstOccurrence(char *destiny, char *origin, char flag);
+
 #endif
