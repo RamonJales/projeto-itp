@@ -16,6 +16,7 @@ void interface() {
     printf("5 - Achar um valor em uma tabela existente\n");
     printf("6 - Apagar uma linha de uma tabela\n");
     printf("7 - Apagar uma tabela\n");
+    printf("8 - Sair\n");
     printf("°---------------------------------------------------°\n");
 }
 
@@ -55,4 +56,12 @@ void interfaceCreateTable(int *colQty, char *colTyp, char **colNames, char *pkNa
         scanf(" %c", &colTyp[i]);
         getchar();
     }
+}
+
+void clearTerminal() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
 }

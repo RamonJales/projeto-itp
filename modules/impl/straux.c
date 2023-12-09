@@ -105,3 +105,8 @@ void removeNumberFromStrInit(char *str) {
     tmpStr[j] = '\0';
     strcpy(str, tmpStr);
 }
+
+void cleanBuffer() {
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF);
+}

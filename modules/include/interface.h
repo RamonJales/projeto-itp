@@ -5,4 +5,6 @@ void interface();
 
 void interfaceCreateTable(int *colQty, char *colTyp, char **colNames, char *pkName, char *tableName);
 
+void clearTerminal();
+
 #endif

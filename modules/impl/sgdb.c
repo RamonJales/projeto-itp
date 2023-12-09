@@ -123,7 +123,7 @@ void printDataFromTable(const char *tableName) {
     char line[100];
 
     strcpy(filename, tableName);
-    strcat(filename, ".itp");
+    strcat(filename, ".txt");
 
     file = fopen(filename, "r");
 
@@ -475,7 +475,7 @@ void searchDataFromTable(char *tableName) {
     fclose(file);
 }
 
-void deleteTuple(char *tableName, char *primaryKey) {
+void deleteTuple(char *tableName, char *pkName) {
     FILE *file, *tmpFile;
     char row[100];
     int found = 0;
@@ -496,9 +496,9 @@ void deleteTuple(char *tableName, char *primaryKey) {
         return;
     }
 
-    int len = strlen(primaryKey);
+    int len = strlen(pkName);
     while(fgets(row, sizeof(row), file) != NULL) {
-        int result = strncmp(primaryKey, row, len);
+        int result = strncmp(pkName, row, len);
         if (result != 0) {
             fputs(row, tmpFile);
         } else {
@@ -510,7 +510,7 @@ void deleteTuple(char *tableName, char *primaryKey) {
     fclose(tmpFile);
 
     if (!found) {
-        printf("Chave primária \"%s\" não encontrada na tabela \"%s\".\n", primaryKey, tableName);
+        printf("Chave primária \"%s\" não encontrada na tabela \"%s\".\n", pkName, tableName);
         remove("temp.txt"); 
         return;
     }
@@ -518,7 +518,7 @@ void deleteTuple(char *tableName, char *primaryKey) {
     remove(auxTableName); 
     rename("temp.txt", auxTableName); 
 
-    printf("Tupla com a chave primária \"%s\" removida com sucesso da tabela \"%s\".\n", primaryKey, tableName);
+    printf("Tupla com a chave primária \"%s\" removida com sucesso da tabela \"%s\".\n", pkName, tableName);
 }
 
 void deleteTable(const char *tableName) {
