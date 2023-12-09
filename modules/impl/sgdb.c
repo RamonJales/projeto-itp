@@ -82,6 +82,7 @@ void listTables() {
 
 int insert(char *tableName, char **colValues) {
     FILE *file;
+    
     //recuperar pk
     char pk[100];
     strcpy(pk, getInformationFromRow(tableName, "pk"));

@@ -46,45 +46,37 @@ int main() {
                 listTables();
                 break;
             case 3: { //CRIAR NOVA LINHA
+                int colQty;
                 char tableName[MAX_TABLE_NAME];
-                printf("Informe o nome da tabela: ");
-                fgets(tableName, sizeof(tableName), stdin);
-                tableName[strcspn(tableName, "\n")] = '\0';
+                char **colValues = (char**) malloc(sizeof(char *));
 
-                //Pegar a col values
-
+                interfaceInsertTable(tableName, colValues, &colQty);
+                insert(tableName, colValues);
+                freeMatrix(colQty, colValues);
                 break;
             }
             case 4: {// PRINTAR OS DADOS DE UMA TABELA
                 char tableName[MAX_TABLE_NAME];
-
                 interfacePrintDataFromTable(tableName);
-
                 printDataFromTable(tableName);
                 break;
             }
             case 5: { //ACHAR UM VALOR NA TABELA
                 char tableName[MAX_TABLE_NAME];
-
                 interfaceSearchDataFromTable(tableName);
-
                 searchDataFromTable(tableName);
                 break;
             }
             case 6: {// APAGAR UMA LINE
                 char pkName[MAX_PK_NAME];
                 char tableName[MAX_TABLE_NAME];
-
                 interfaceDeleteLine(tableName, pkName);
-
                 deleteLine(tableName, pkName);
                 break;
             }
             case 7: { // APAGAR UMA TABELA
                 char tableName[MAX_TABLE_NAME];
-
                 interfaceDeleteTable(tableName);
-
                 deleteTable(tableName);
                 break;
             }

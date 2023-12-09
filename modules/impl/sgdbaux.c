@@ -40,7 +40,7 @@ char* getInformationFromRow(char *tableName, char *flag) {
     file = fopen(auxTableName, "r");
     if (file == NULL) {
         printf("Erro ao abrir o arquivo.\n");
-        return "N";
+        return NULL;
     }
 
     //encontrar linha desejada
@@ -55,7 +55,7 @@ char* getInformationFromRow(char *tableName, char *flag) {
     char *information = (char*) malloc(100*sizeof(char));
     extractStr(row, information, len+1);
     fclose(file);
-    free(information);
+    //free(information);
 
     return information;
 }

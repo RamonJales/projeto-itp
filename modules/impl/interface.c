@@ -1,5 +1,6 @@
 #include "interface.h"
 #include "straux.h"
+#include "sgdbaux.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -56,6 +57,30 @@ void interfaceCreateTable(int *colQty, char *colTyp, char **colNames, char *pkNa
         printf("Informe o tipo da coluna %d: ", i+1);
         scanf(" %c", &colTyp[i]);
         getchar();
+    }
+}
+
+void interfaceInsertTable(char *tableName, char **colValues, int *colQty) {
+    printf("Informe o nome da tabela: ");
+    scanf("%s", tableName);
+    getchar();
+    cutOffEmptySpaces(tableName);
+
+    //pegar o valor da 
+    char col[100];
+    strcpy(col, getInformationFromRow(tableName, "cols"));
+    *colQty = atoi(col);
+
+    colValues = (char**) realloc(colValues, (*colQty) * sizeof(char *));
+
+    for (int i = 0; i < (*colQty); i++) {
+        printf("Informe o valor da coluna %d: ", i+1);
+
+        char tmpName[MAX_COLUMN_NAME];
+        fgets(tmpName, sizeof(tmpName), stdin);
+        colValues[i] = strdup(tmpName);
+        cutOffEmptySpaces(colValues[i]);
+        removeCharFromString(colValues[i], '|');
     }
 }
 
