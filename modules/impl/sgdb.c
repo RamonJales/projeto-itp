@@ -173,7 +173,9 @@ void searchDataFromTable(char *tableName) {
         char strTmp[100];
         char strAux[100];
 
+        //tira o pk
         strcpy(strTmp, strchr(line, '|') + 1);
+        //tira as colunas(de tras) desnecessarias
         for (int j = 0; j < i; j++) {
         strcpy(strTmp, strchr(strTmp, '|') + 1);
         }
@@ -185,15 +187,15 @@ void searchDataFromTable(char *tableName) {
 
     //imprime o nome das colunas
     printf("Colunas disponíveis na tabela '%s':\n", tableName);
-    for (int i = 1; i <= colQty; i++) {
-        printf("%d. %s\n", i, colNames[i]);
+    for (int i = 0; i < colQty; i++) {
+        printf("%d. %s\n", i+1, colNames[i]);
     }
 
     //selecionar a coluna
     printf("Selecione o número da coluna para pesquisar: ");
     //colunas começam de 1(a pk é a 0, mas ela não é printada)
     int selectedCol;
-    scanf("%d", &selectedCol);
+    scanf("%d", &selectedCol); //vai ser digitado maior que 1
 
     //tratamento de erro do input
     if (selectedCol < 1 || selectedCol > colQty) {
@@ -203,7 +205,7 @@ void searchDataFromTable(char *tableName) {
     }
 
     //pegar o tipo da coluna
-    strcpy(strColType, strchr(colNames[selectedCol], '-') + 1);
+    strcpy(strColType, strchr(colNames[selectedCol-1], '-') + 1);
     char colType = strColType[0];
 
     //pegar valores das colunas
@@ -224,7 +226,7 @@ void searchDataFromTable(char *tableName) {
         j++;
     }
 
-    printf("Digite o valor para pesquisar na coluna '%s': ", colNames[selectedCol]);
+    printf("Digite o valor para pesquisar na coluna '%s': ", colNames[selectedCol-1]);
     scanf("%s", searchValue);
 
     printf("Opções de pesquisa:\n");
@@ -238,7 +240,7 @@ void searchDataFromTable(char *tableName) {
     printf("Escolha a opção de pesquisa: ");
     scanf("%d", &searchOption);
 
-    printf("Resultados da pesquisa na coluna '%s':\n", searchColName);
+    printf("Resultados da pesquisa: ");
 
     // ATUALIZAR SWITCH
     switch (searchOption) {
@@ -269,8 +271,8 @@ void searchDataFromTable(char *tableName) {
             //tipo double 
             if(colType == 'd') {
                 //transformar o valor para double
-                float colVal = atof(colValues[i]);
-                float searchVal = atof(searchValue);
+                double colVal = atof(colValues[i]);
+                double searchVal = atof(searchValue);
                 //verificação
                 if(colVal > searchVal) {
                     printf("%f\n", colVal);
@@ -475,7 +477,7 @@ void searchDataFromTable(char *tableName) {
     fclose(file);
 }
 
-void deleteTuple(char *tableName, char *pkName) {
+void deleteLine(char *tableName, char *pkName) {
     FILE *file, *tmpFile;
     char row[100];
     int found = 0;

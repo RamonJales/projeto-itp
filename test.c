@@ -4,11 +4,14 @@
 #include "sgdb.h"
 
 int main() {
-    FILE *file;
-    char colNames[100][100];
-    int colQty = 2;
-    char line[100];
-    char colValues[100][100];
+
+    searchDataFromTable("test1");
+
+    // FILE *file;
+    // char colNames[100][100];
+    // int colQty = 2;
+    // char line[100];
+    // char colValues[100][100];
     // int len = 2;
 
     // // char **v1 = (char**) malloc(len * sizeof(char *));
@@ -42,22 +45,5 @@ int main() {
     //deleteTuple(tname, "2");
 
     //searchDataFromTable("test1");
-
-    file = fopen("test1.txt", "r");
-
-    fgets(line, sizeof(line), file); // Ignorar a linha com "nome:tableName"
-    fgets(line, sizeof(line), file); // Ignorar a linha com "pk:0"
-    fgets(line, sizeof(line), file); // Ignorar a linha com "cols:colQty"
-    colQty = atoi(strchr(line, ':') + 1); 
-
-    for (int i = 0; i <= colQty; i++) {
-        fscanf(file, "%[^|]|", colNames[i]); 
-    }
-    fscanf(file, "\n");
-
-    for (int i = 0; i < colQty; i++)
-    {
-        printf("%s", colNames[i]);
-    }
     
 }

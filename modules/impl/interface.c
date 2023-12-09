@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define MAX_COLUMN_NAME 50
 
@@ -55,6 +56,46 @@ void interfaceCreateTable(int *colQty, char *colTyp, char **colNames, char *pkNa
         printf("Informe o tipo da coluna %d: ", i+1);
         scanf(" %c", &colTyp[i]);
         getchar();
+    }
+}
+
+void interfacePrintDataFromTable(char *tableName) {
+    printf("Informe o nome da tabela: ");
+    fgets(tableName, sizeof(tableName), stdin);
+    tableName[strcspn(tableName, "\n")] = '\0'; // Remover o caractere de nova linha, se presente
+    
+    for (int i = 0; tableName[i]; i++) {
+        tableName[i] = tolower(tableName[i]);
+    }
+}
+
+void interfaceSearchDataFromTable(char *tableName) {
+    printf("Informe o nome da tabela: ");
+    fgets(tableName, sizeof(tableName), stdin);
+    tableName[strcspn(tableName, "\n")] = '\0';
+}
+
+void interfaceDeleteLine(char *tableName, char *pkName) {
+    printf("Informe o nome da tabela: ");
+    fgets(tableName, sizeof(tableName), stdin);
+    tableName[strcspn(tableName, "\n")] = '\0';
+
+    printf("Informe a chave primária da tupla a ser apagada: ");
+    fgets(pkName, sizeof(pkName), stdin);
+    pkName[strcspn(pkName, "\n")] = '\0';
+
+    for (int i = 0; tableName[i]; i++) {
+    tableName[i] = tolower(tableName[i]);
+    }
+}
+
+void interfaceDeleteTable(char *tableName) {
+    printf("Informe o nome da tabela a ser apagada: ");
+    fgets(tableName, sizeof(tableName), stdin);
+    tableName[strcspn(tableName, "\n")] = '\0';
+
+    for (int i = 0; tableName[i]; i++) {
+    tableName[i] = tolower(tableName[i]);
     }
 }
 

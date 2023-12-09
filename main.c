@@ -4,6 +4,8 @@
 #include <ctype.h>
 #include "sgdb.h"
 #include "interface.h"
+#include "straux.h"
+#include "funcaux.h"
 
 #define MAX_PK_NAME 50
 #define MAX_TABLE_NAME 50
@@ -34,11 +36,7 @@ int main() {
 
                 create_table(colQty, colTyp, colNames, pkName, tableName);
 
-                for (int i = 0; i < colQty; i++) {
-                    free(colNames[i]);
-                }
-                
-                free(colNames);
+                freeMatrix(colQty, colNames);
                 free(colTyp);
     
                 printf("Tabela criada!\n");
@@ -59,13 +57,8 @@ int main() {
             }
             case 4: {// PRINTAR OS DADOS DE UMA TABELA
                 char tableName[MAX_TABLE_NAME];
-                printf("Informe o nome da tabela: ");
-                fgets(tableName, sizeof(tableName), stdin);
-                tableName[strcspn(tableName, "\n")] = '\0'; // Remover o caractere de nova linha, se presente
 
-                for (int i = 0; tableName[i]; i++) {
-                    tableName[i] = tolower(tableName[i]);
-                }
+                interfacePrintDataFromTable(tableName);
 
                 printDataFromTable(tableName);
                 break;
@@ -73,41 +66,25 @@ int main() {
             case 5: { //ACHAR UM VALOR NA TABELA
                 char tableName[MAX_TABLE_NAME];
 
-                printf("Informe o nome da tabela: ");
-                fgets(tableName, sizeof(tableName), stdin);
-                tableName[strcspn(tableName, "\n")] = '\0';
+                interfaceSearchDataFromTable(tableName);
 
                 searchDataFromTable(tableName);
                 break;
             }
-            case 6: {// APAGAR UMA TUPLA
+            case 6: {// APAGAR UMA LINE
                 char pkName[MAX_PK_NAME];
                 char tableName[MAX_TABLE_NAME];
 
-                printf("Informe o nome da tabela: ");
-                fgets(tableName, sizeof(tableName), stdin);
-                tableName[strcspn(tableName, "\n")] = '\0';
+                interfaceDeleteLine(tableName, pkName);
 
-                printf("Informe a chave primária da tupla a ser apagada: ");
-                fgets(pkName, sizeof(pkName), stdin);
-                pkName[strcspn(pkName, "\n")] = '\0';
-
-                for (int i = 0; tableName[i]; i++) {
-                    tableName[i] = tolower(tableName[i]);
-                }
-
-                deleteTuple(tableName, pkName);
+                deleteLine(tableName, pkName);
                 break;
             }
             case 7: { // APAGAR UMA TABELA
                 char tableName[MAX_TABLE_NAME];
-                printf("Informe o nome da tabela a ser apagada: ");
-                fgets(tableName, sizeof(tableName), stdin);
-                tableName[strcspn(tableName, "\n")] = '\0';
 
-                for (int i = 0; tableName[i]; i++) {
-                    tableName[i] = tolower(tableName[i]);
-                }
+                interfaceDeleteTable(tableName);
+
                 deleteTable(tableName);
                 break;
             }
@@ -117,14 +94,11 @@ int main() {
             default:
                 printf("Opção inválida. Escolha novamente.\n");
         }
-
         if (op == 8) {
             break; // Sai do loop principal se a opção for 8
         }
-
         printf("Pressione Enter para continuar...");
         getchar(); 
     }
-
     return 0;
 }

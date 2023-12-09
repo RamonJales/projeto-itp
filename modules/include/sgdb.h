@@ -11,7 +11,7 @@ void printDataFromTable(const char *tableName);
 
 void searchDataFromTable(char *tableName); 
 
-void deleteTuple(char *tableName, char *pkName);
+void deleteLine(char *tableName, char *pkName);
 
 void deleteTable(const char *tableName);
 
