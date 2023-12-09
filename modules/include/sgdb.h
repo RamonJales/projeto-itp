@@ -7,12 +7,12 @@ void listTables();
 
 int insert(char *tableName, char **colValues);
 
-void printDataFromTable(const char *tableName);
+void printDataFromTable(char *tableName);
 
 void searchDataFromTable(char *tableName); 
 
 void deleteLine(char *tableName, char *pkName);
 
-void deleteTable(const char *tableName);
+void deleteTable(char *tableName);
 
 #endif

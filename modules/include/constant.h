@@ -3,6 +3,8 @@
 
 #define MAX_PK_NAME 50
 #define MAX_TABLE_NAME 50
+#define MAX_STR_LENGHT 100
+#define MAX_LINE_LENGHT 10000
 #define MAX_COLS 50
 #define MAX_COL_VALUE_LENGTH 50
 

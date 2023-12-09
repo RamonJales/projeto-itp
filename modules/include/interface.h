@@ -15,6 +15,8 @@ void interfaceDeleteLine(char *tableName, char *pkName);
 
 void interfaceDeleteTable(char *tableName);
 
+void interfaceMenuSearchData(char *searchValue);
+
 void clearTerminal();
 
 #endif

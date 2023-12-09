@@ -124,6 +124,16 @@ void interfaceDeleteTable(char *tableName) {
     }
 }
 
+void interfaceMenuSearchData(char *searchValue) {
+    printf("Opções de pesquisa:\n");
+    printf("1. Valores maior que '%s': \n", searchValue);
+    printf("2. Valores maior ou igual a '%s':\n", searchValue);
+    printf("3. Valores igual a '%s':\n", searchValue);
+    printf("4. Valores menor que '%s':\n", searchValue);
+    printf("5. Valores menor ou igual a '%s':\n", searchValue);
+    printf("6. Valores próximos a '%s' (apenas para colunas do tipo string):\n", searchValue);
+}
+
 void clearTerminal() {
     #ifdef _WIN32
         system("cls");

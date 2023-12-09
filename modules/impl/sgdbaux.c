@@ -4,16 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-int openFileError(FILE *file) {
-    if(file == NULL) {
-        printf("Erro ao abrir o arquivo.\n");
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
-
 int registerTable(char tableName[]) {
     FILE *file;
 

@@ -1,6 +1,8 @@
 #include "sgdb.h"
 #include "sgdbaux.h"
 #include "straux.h"
+#include "constant.h"
+#include "interface.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -118,15 +120,14 @@ int insert(char *tableName, char **colValues) {
     return 0;
 }
 
-void printDataFromTable(const char *tableName) {
+void printDataFromTable(char *tableName) {
     FILE *file;
-    char filename[100];
     char line[100];
 
-    strcpy(filename, tableName);
-    strcat(filename, ".txt");
+    char auxTableName[100];
+    putStrSufix(tableName, ".txt", auxTableName);
 
-    file = fopen(filename, "r");
+    file = fopen(auxTableName, "r");
 
     if (file == NULL) {
         printf("Error ao abrir a tabela ou o arquivo nao existe!\n");
@@ -144,12 +145,12 @@ void printDataFromTable(const char *tableName) {
 
 void searchDataFromTable(char *tableName) {
     FILE *file;
-    char colNames[100][100]; // Matriz para armazenar nomes das colunas
     int colQty;
-    char searchColName[100];
-    char searchValue[100];
     int searchOption;
-    char line[100];
+    char colNames[100][MAX_TABLE_NAME]; // Matriz para armazenar nomes das colunas
+    char searchColName[MAX_STR_LENGHT];
+    char searchValue[MAX_STR_LENGHT];
+    char line[MAX_LINE_LENGHT];
     char colValues[100][100];
     char strColType[10];
 
@@ -164,9 +165,9 @@ void searchDataFromTable(char *tableName) {
     }
 
     //pega o nome das colunas(exceto a do pk) e coloca no vetor
-    fgets(line, sizeof(line), file); // Ignorar a linha com "nome:tableName"
-    fgets(line, sizeof(line), file); // Ignorar a linha com "pk:0"
-    fgets(line, sizeof(line), file); // Ignorar a linha com "cols:colQty"
+    fgets(line, sizeof(line), file);
+    fgets(line, sizeof(line), file);
+    fgets(line, sizeof(line), file);
     colQty = atoi(strchr(line, ':') + 1); 
     fgets(line, sizeof(line), file);
 
@@ -178,13 +179,12 @@ void searchDataFromTable(char *tableName) {
         strcpy(strTmp, strchr(line, '|') + 1);
         //tira as colunas(de tras) desnecessarias
         for (int j = 0; j < i; j++) {
-        strcpy(strTmp, strchr(strTmp, '|') + 1);
+            strcpy(strTmp, strchr(strTmp, '|') + 1);
         }
 
         cutStrUntilFirstOccurrence(strAux, strTmp, '|');
         strcpy(colNames[i], strAux);
     }
-    //fscanf(file, "\n");
 
     //imprime o nome das colunas
     printf("Colunas disponíveis na tabela '%s':\n", tableName);
@@ -196,7 +196,7 @@ void searchDataFromTable(char *tableName) {
     printf("Selecione o número da coluna para pesquisar: ");
     //colunas começam de 1(a pk é a 0, mas ela não é printada)
     int selectedCol;
-    scanf("%d", &selectedCol); //vai ser digitado maior que 1
+    scanf("%d", &selectedCol);
 
     //tratamento de erro do input
     if (selectedCol < 1 || selectedCol > colQty) {
@@ -213,8 +213,8 @@ void searchDataFromTable(char *tableName) {
         //varre as linhas
     int j = 0;
     while (fgets(line, sizeof(line), file) != NULL) {
-        char auxLine[1000];
-        char tmpLine[1000];
+        char auxLine[MAX_LINE_LENGHT];
+        char tmpLine[MAX_LINE_LENGHT];
         //Na linha em que ele estiver, ele pega a informação apenas da coluna selecionadas 
             //varre as colunas. O strcht pega a primeira ocorrencia do char, mas eu não quero a primeira ocorrencia
         for(int i = 0; i< selectedCol; i++) {
@@ -230,13 +230,7 @@ void searchDataFromTable(char *tableName) {
     printf("Digite o valor para pesquisar na coluna '%s': ", colNames[selectedCol-1]);
     scanf("%s", searchValue);
 
-    printf("Opções de pesquisa:\n");
-    printf("1. Valores maior que '%s'\n", searchValue);
-    printf("2. Valores maior ou igual a '%s'\n", searchValue);
-    printf("3. Valores igual a '%s'\n", searchValue);
-    printf("4. Valores menor que '%s'\n", searchValue);
-    printf("5. Valores menor ou igual a '%s'\n", searchValue);
-    printf("6. Valores próximos a '%s' (apenas para colunas do tipo string)\n", searchValue);
+    interfaceMenuSearchData(searchValue);
     
     printf("Escolha a opção de pesquisa: ");
     scanf("%d", &searchOption);
@@ -247,8 +241,6 @@ void searchDataFromTable(char *tableName) {
     switch (searchOption) {
     case(1) :
         for (int i = 0; i < j; i++) {
-            //deve haver uma verificação para saber qual é o tipo da coluna
-            //devo converter para comprarar
             //tipo int
             if(colType == 'i') {
                 //transformar o valor para inteiro
@@ -261,7 +253,6 @@ void searchDataFromTable(char *tableName) {
             }
             //tipo float
             if(colType == 'f') {
-                //transformar o valor para float
                 float fColVal = (float) atof(colValues[i]);
                 float fSearchVal = (float) atof(searchValue);
                 //verificação
@@ -271,7 +262,6 @@ void searchDataFromTable(char *tableName) {
             }
             //tipo double 
             if(colType == 'd') {
-                //transformar o valor para double
                 double colVal = atof(colValues[i]);
                 double searchVal = atof(searchValue);
                 //verificação
@@ -281,7 +271,6 @@ void searchDataFromTable(char *tableName) {
             }
             //tipo char 
             if(colType == 'c') {
-                //transformar o valor para char
                 char colVal = colValues[i][0];
                 char searchVal = searchValue[0];
                 //verificação
@@ -304,7 +293,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'i') {
                 int intColVal = atoi(colValues[i]);
                 int intSearchVal = atoi(searchValue);
-                //verificação
                 if(intColVal >= intSearchVal) {
                     printf("%d\n", intColVal);
                 }
@@ -312,7 +300,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'f') {
                 float fColVal = (float) atof(colValues[i]);
                 float fSearchVal = (float) atof(searchValue);
-                //verificação
                 if(fColVal >= fSearchVal) {
                     printf("%f\n", fColVal);
                 }
@@ -320,7 +307,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'd') {
                 float colVal = atof(colValues[i]);
                 float searchVal = atof(searchValue);
-                //verificação
                 if(colVal >= searchVal) {
                     printf("%f\n", colVal);
                 }
@@ -345,7 +331,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'i') {
                 int intColVal = atoi(colValues[i]);
                 int intSearchVal = atoi(searchValue);
-                //verificação
                 if(intColVal == intSearchVal) {
                     printf("%d\n", intColVal);
                 }
@@ -353,7 +338,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'f') {
                 float fColVal = (float) atof(colValues[i]);
                 float fSearchVal = (float) atof(searchValue);
-                //verificação
                 if(fColVal == fSearchVal) {
                     printf("%f\n", fColVal);
                 }
@@ -361,7 +345,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'd') {
                 float colVal = atof(colValues[i]);
                 float searchVal = atof(searchValue);
-                //verificação
                 if(colVal == searchVal) {
                     printf("%f\n", colVal);
                 }
@@ -386,7 +369,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'i') {
                 int intColVal = atoi(colValues[i]);
                 int intSearchVal = atoi(searchValue);
-                //verificação
                 if(intColVal < intSearchVal) {
                     printf("%d\n", intColVal);
                 }
@@ -394,7 +376,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'f') {
                 float fColVal = (float) atof(colValues[i]);
                 float fSearchVal = (float) atof(searchValue);
-                //verificação
                 if(fColVal < fSearchVal) {
                     printf("%f\n", fColVal);
                 }
@@ -402,7 +383,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'd') {
                 float colVal = atof(colValues[i]);
                 float searchVal = atof(searchValue);
-                //verificação
                 if(colVal < searchVal) {
                     printf("%f\n", colVal);
                 }
@@ -427,7 +407,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'i') {
                 int intColVal = atoi(colValues[i]);
                 int intSearchVal = atoi(searchValue);
-                //verificação
                 if(intColVal <= intSearchVal) {
                     printf("%d\n", intColVal);
                 }
@@ -435,7 +414,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'f') {
                 float fColVal = (float) atof(colValues[i]);
                 float fSearchVal = (float) atof(searchValue);
-                //verificação
                 if(fColVal <= fSearchVal) {
                     printf("%f\n", fColVal);
                 }
@@ -443,7 +421,6 @@ void searchDataFromTable(char *tableName) {
             if(colType == 'd') {
                 float colVal = atof(colValues[i]);
                 float searchVal = atof(searchValue);
-                //verificação
                 if(colVal <= searchVal) {
                     printf("%f\n", colVal);
                 }
@@ -524,13 +501,11 @@ void deleteLine(char *tableName, char *pkName) {
     printf("Tupla com a chave primária \"%s\" removida com sucesso da tabela \"%s\".\n", pkName, tableName);
 }
 
-void deleteTable(const char *tableName) {
-    // Create file path
-    char filePath[100];
-    strcpy(filePath, tableName);
-    strcat(filePath, ".txt");
+void deleteTable(char *tableName) {
+    char auxTableName[100];
+    putStrSufix(tableName, ".txt", auxTableName);
 
-    if (remove(filePath) == 0) {
+    if (remove(auxTableName) == 0) {
         printf("Tabela \"%s\" removida com sucesso.\n", tableName);
     } else {
         printf("Erro ao remover a tabela \"%s\".\n", tableName);
