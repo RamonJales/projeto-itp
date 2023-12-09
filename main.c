@@ -6,11 +6,7 @@
 #include "interface.h"
 #include "straux.h"
 #include "funcaux.h"
-
-#define MAX_PK_NAME 50
-#define MAX_TABLE_NAME 50
-#define MAX_COLS 50
-#define MAX_COL_VALUE_LENGTH 50
+#include "constant.h"
 
 int main() {
     int op;
