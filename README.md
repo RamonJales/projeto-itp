@@ -142,3 +142,24 @@ Foram feitas todas as funções pedida. As funcionalidades extras adicionadas s�
 ### O que faria de forma diferente
 Teria usado constantes desde o começo para serem usadas em todo o programa. Como as constantes para as flags(os delimitadores como "|" e "-") da estrutura do banco de dados.
 
+### Autores e Contribuições
+Dupla: Ramon Jales e Paz María Marcato
+ - Paz:
+   - main 
+   - listTables
+   - printDataFromTable
+   - deleteLine
+   - deleteTable
+   - searchDataFromTable: 1/2
+   - módulo straux 1/2
+   - limpar os dados do terminal
+   - checador de similaridade dado um input errado
+
+ - Ramon:
+   - creatTable
+   - insertTable
+   - searchDataFromTable: 1/2
+   - módulo interface,
+   - módulo sgdbaux
+   - módulo funcaux
+   - módulo straux 1/2
