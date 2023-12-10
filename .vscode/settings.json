@@ -5,6 +5,7 @@
         "straux.h": "c",
         "ctype.h": "c",
         "*.tcc": "c",
-        "list": "c"
+        "list": "c",
+        "constant.h": "c"
     }
 }

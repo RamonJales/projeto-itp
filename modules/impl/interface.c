@@ -53,6 +53,7 @@ void interfaceCreateTable(int *colQty, char *colTyp, char **colNames, char *pkNa
         colNames[i] = strdup(tmpName);
         cutOffEmptySpaces(colNames[i]);
         removeCharFromString(colNames[i], '|');
+        removeCharFromString(colNames[i], '-');
 
         printf("Informe o tipo da coluna %d: ", i+1);
         scanf(" %c", &colTyp[i]);

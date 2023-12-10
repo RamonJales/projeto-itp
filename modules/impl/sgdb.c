@@ -522,7 +522,7 @@ void deleteTable(char *tableName) {
     FILE *file;
     FILE *tmp;
     char row[MAX_LINE_LENGHT];
-    file = fopen("databases.txt", "a");
+    file = fopen("databases.txt", "r");
     if (file == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;

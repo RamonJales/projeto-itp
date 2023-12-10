@@ -55,7 +55,7 @@ void updatePK(char *tableName, char *pk) {
     FILE *tmp;
     char row[1000];
 
-    file = fopen(tableName, "r+");
+    file = fopen(tableName, "r");
     if (file == NULL) {
         printf("Erro ao abrir o arquivo.\n");
     }
