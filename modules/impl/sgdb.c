@@ -134,11 +134,21 @@ void printDataFromTable(char *tableName) {
         return;
     }
 
-    printf("Dados da tabela'%s':\n", tableName);
+    printf("Dados da tabela '%s':\n", tableName);
+
+    fgets(line, sizeof(line), file);
+    fgets(line, sizeof(line), file);
+    printf("%s", line);
 
     while (fgets(line, sizeof(line), file) != NULL) {
-        printf("%s", line);
+        char *token = strtok(line, "|");
+        while (token != NULL) {
+            printf("%-10s", token); 
+            token = strtok(NULL, "|");
+        }
+        printf("\n");
     }
+    //printf("\n");
 
     fclose(file);
 }
