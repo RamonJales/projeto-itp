@@ -61,12 +61,12 @@ void updatePK(char *tableName, char *pk) {
     }
 
     tmp = fopen("tmp.txt", "w");
-    if (file == NULL) {
+    if (tmp == NULL) {
         printf("Erro ao abrir o arquivo.\n");
     }
 
     while(fgets(row, sizeof(row), file) != NULL) {
-        int result = strncmp("pk", row, 2);
+        int result = strncmp("pk:", row, 3);
         if(result == 0) {
             fprintf(tmp, "pk:");
             fprintf(tmp, pk);
