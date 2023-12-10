@@ -29,6 +29,20 @@ O projeto é composto pelos seguintes arquivos:
 - `interface.h`: Conjunto de funções relacionadas a interface visual do programa.
 - `main.c`: Arquivo principal, onde será rodado o programa.
 
+## Compilação e Execução
+Compilação:
+```
+gcc main.c modules/impl/* -I modules/include 
+```
+Execução linux:
+```
+./a.out
+```
+Execução windows:
+```
+./a.exe
+```
+
 ## Funções Principais
 
 ### `create_table`
@@ -119,3 +133,33 @@ Módulo responsável por funções auxiliares gerais.
 
 ### `interface`
 O segundo módulo mais importante é esse. Responsável pela entrada, tratamento de erros e de entradas; e saída de dados;
+
+## Módulos
+
+### O que foi feito
+Foram feitas todas as funções pedida. As funcionalidades extras adicionadas são: a chave primária ser adicionada automaticamente.
+
+### O que faria de forma diferente
+Teria usado constantes desde o começo para serem usadas em todo o programa. Como as constantes para as flags(os delimitadores como "|" e "-") da estrutura do banco de dados.
+
+### Autores e Contribuições
+Dupla: Ramon Jales e Paz María Marcato
+ - Paz:
+   - main 
+   - listTables
+   - printDataFromTable
+   - deleteLine
+   - deleteTable
+   - searchDataFromTable: 1/2
+   - módulo straux 1/2
+   - limpar os dados do terminal
+   - checador de similaridade dado um input errado
+
+ - Ramon:
+   - creatTable
+   - insertTable
+   - searchDataFromTable: 1/2
+   - módulo interface,
+   - módulo sgdbaux
+   - módulo funcaux
+   - módulo straux 1/2
