@@ -11,28 +11,25 @@
 int create_table(int colQty, char *colTyp, char **colNames, char *pkName, char *tableName) {
     FILE *file;
     
-    //create file    
+    //cria arquivo   
     /*o processo de colocar o sufixo .txt está nessa função pelo fato de precisarmos do nome original.
     De qualquer modo iríamos ter que retirar esse fufixo.*/
     char auxTableName[100];
     putStrSufix(tableName, ".txt", auxTableName);
-
     file = fopen(auxTableName, "w");
-
     if (file == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return 1;
     }
 
-    //create content file
-        //meta dados
+    //cria metadados
     fprintf(file, "nome:");
     fprintf(file, tableName);
     fprintf(file, "\n");
 
-    fprintf(file, "pk:");
-    fprintf(file, "0\n");
+    fprintf(file, "pk:0\n");
 
+    //deve ser int, pois usamos esse valor para alocação dinâmica na interface
     fprintf(file, "cols:");
     char col[100];
     sprintf(col, "%d", colQty);
@@ -87,7 +84,7 @@ int insert(char *tableName, char **colValues) {
     
     //recuperar pk
     char pk[100];
-    strcpy(pk, getInformationFromRow(tableName, "pk"));
+    strcpy(pk, getInformationFromRow(tableName, "pk:"));
     int pkInt = atoi(pk) + 1;
     sprintf(pk, "%d", pkInt);
 
@@ -101,12 +98,12 @@ int insert(char *tableName, char **colValues) {
 
     fprintf(file, pk);
     fprintf(file, "|");
-    //adicionar os valores
-        //pega o número de colunas
+    //pega o número de colunas
     char ncol[100];
     strcpy(ncol, getInformationFromRow(tableName, "cols"));
     int ncolInt = atoi(ncol);
 
+    //adicionar os valores
     for (int i = 0; i < ncolInt; i++) {
         fprintf(file, colValues[i]);
         fprintf(file, "|");
@@ -520,4 +517,32 @@ void deleteTable(char *tableName) {
     } else {
         printf("Erro ao remover a tabela \"%s\".\n", tableName);
     }
+
+    //apagar nome da tabela no databases
+    FILE *file;
+    FILE *tmp;
+    char row[MAX_LINE_LENGHT];
+    file = fopen("databases.txt", "a");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+    tmp = fopen("tmp.txt", "w");
+    if (tmp == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    int len = strlen(tableName);
+    while(fgets(row, sizeof(row), file) != NULL) {
+        int result = strncmp(tableName, row, len);
+        if(result != 0) {
+            fprintf(tmp, row);
+        }
+    }
+    remove("databases.txt");
+    rename("tmp.txt", "databases.txt");
+
+    fclose(tmp);
+    fclose(file);
 }
