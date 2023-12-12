@@ -19,35 +19,32 @@ int registerTable(char tableName[]) {
     return 0;
 }
 
-char* getInformationFromRow(char *tableName, char *flag) {
-    FILE *file;
-    char row[1000];
+char *getInformationFromRow(char *tableName, char *flag) {
+  FILE *file;
+  char row[1000];
 
-    //recuperar pk
-    char auxTableName[100];
-    putStrSufix(tableName, ".txt", auxTableName);
+  // recuperar pk
+  char auxTableName[100];
+  putStrSufix(tableName, ".txt", auxTableName);
 
-    file = fopen(auxTableName, "r");
-    if (file == NULL) {
-        printf("Erro ao abrir o arquivo.\n");
-        return NULL;
+  file = fopen(auxTableName, "r");
+  if (file == NULL) {
+    printf("Erro ao abrir o arquivo.\n");
+    return NULL;
+  }
+
+  // encontrar linha desejada
+  int len = strlen(flag);
+  while (fgets(row, sizeof(row), file) != NULL) {
+    int result = strncmp(flag, row, len);
+    if (result == 0) {
+      break;
     }
+  }
 
-    //encontrar linha desejada
-    int len = strlen(flag);
-    while(fgets(row, sizeof(row), file) != NULL) {
-        int result = strncmp(flag, row, len);
-        if(result == 0) {
-            break;
-        }
-    }
-
-    char *information = (char*) malloc(100*sizeof(char));
-    information = strchr(row, len+1);
-    //extractStr(row, information, len+1);
-    fclose(file);
-
-    return information;
+  char *information = strchr(row, ':') + 1;
+  fclose(file);
+  return information;
 }
 
 void updatePK(char *tableName, char *pk) {
