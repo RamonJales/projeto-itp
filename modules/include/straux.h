@@ -18,10 +18,4 @@ void cutStrUntilFirstOccurrence(char *destiny, char *origin, char flag);
 
 void cleanBuffer();
 
-int levenshteinDistance(const char *s1, const char *s2);
-
-bool isSimilar(const char *inputTableName, const char *existingTableName); 
-
-void checkSimilarity(const char *inputTableName, const char *existingTables[], int numOfTables);
-
 #endif

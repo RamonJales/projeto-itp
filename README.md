@@ -6,26 +6,27 @@ Este conjunto de funções em linguagem C oferece operações básicas de gerenc
 ## Dependências
 Certifique-se de incluir os seguintes arquivos de cabeçalho:
 ```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include "sgdb.h"
 #include "sgdbaux.h"
 #include "straux.h"
 #include "constant.h"
 #include "interface.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 ```
 
 ## Estrutura do Projeto
 
 O projeto é composto pelos seguintes arquivos:
 
-- `sgdb.h`: Contem o conjunto de **funções principais** relacionadas ao SGDB.
-  - Funções principais: createTable, insert, listTables, printDataFromTable, searchDataFromTable, deleteLine, deleteTable. 
-- `sgdbaux.h`: Contem o conjunto de funções auxiliares relacionadas ao SGDB.
-- `straux.h`: Contem o conjunto de funções auxiliares relacionadas a manipulação de strings.
-- `constant.h`: Contem o conjunto de constantes do projeto.
-- `funcaux.h`: Contem o conjunto de funções gerais auxiliares do projeto.
+- `sgdb.h`: Contém o conjunto de **funções principais** relacionadas ao SGDB.
+  - Funções principais: createTable, insertLine, listTables, printDataFromTable, searchDataFromTable, deleteLine, deleteTable. 
+- `sgdbaux.h`: Contém o conjunto de funções auxiliares relacionadas ao SGDB.
+- `straux.h`: Contém o conjunto de funções auxiliares relacionadas a manipulação de strings.
+- `constant.h`: Contém o conjunto de constantes do projeto.
+- `funcaux.h`: Contém o conjunto de funções gerais auxiliares do projeto.
 - `interface.h`: Conjunto de funções relacionadas a interface visual do programa.
 - `main.c`: Arquivo principal, onde será rodado o programa.
 
@@ -45,10 +46,10 @@ Execução windows:
 
 ## Funções Principais
 
-### `create_table`
+### `createTable`
 
 ```c
-int create_table(int colQty, char *colTyp, char **colNames, char *pkName, char *tableName);
+int createTable(int colQty, char *colTyp, char **colNames, char *pkName, char *tableName);
 ```
 Esta função cria uma nova tabela no banco de dados. Ela recebe o número de colunas, os tipos das colunas, os nomes das colunas, o nome da chave primária e o nome da tabela como parâmetros.
 
@@ -59,10 +60,10 @@ void listTables();
 ```
 Esta função lista todas as tabelas existentes no banco de dados.
 
-### `insert`
+### `insertLine`
 
 ```c
-int insert(char *tableName, char **colValues);
+int insertLine(char *tableName, char **colValues);
 ```
 Esta função insere uma nova linha de dados em uma tabela existente. Ela recebe o nome da tabela e os valores das colunas como parâmetros.
 
@@ -137,13 +138,15 @@ O segundo módulo mais importante é esse. Responsável pela entrada, tratamento
 ## Módulos
 
 ### O que foi feito
-Foram feitas todas as funções pedida. As funcionalidades extras adicionadas são: a chave primária ser adicionada automaticamente.
+Foram feitas todas as funções pedida. As funcionalidades extras adicionadas são: a chave primária ser adicionada automaticamente. Adicionamos, também, a funcionalidade do usuário digitar quantas linhas irá adicionar de uma vez, tendo a oportunidade de adicionar em diferentes tabelas.
 
 ### O que faria de forma diferente
 Teria usado constantes desde o começo para serem usadas em todo o programa. Como as constantes para as flags(os delimitadores como "|" e "-") da estrutura do banco de dados.
 
+Teria tentado automatizar nossos testes para podermos, não só testar mais, como também ter mais segurança.
+
 ### Autores e Contribuições
-Dupla: Ramon Jales e Paz María Marcato
+Dupla: Ramon Jales e María Paz Marcato
  - Paz:
    - main 
    - listTables
@@ -153,11 +156,11 @@ Dupla: Ramon Jales e Paz María Marcato
    - searchDataFromTable: 1/2
    - módulo straux 1/2
    - limpar os dados do terminal
-   - checador de similaridade dado um input errado
 
  - Ramon:
-   - creatTable
+   - createTable
    - insertTable
+   - insertLine
    - searchDataFromTable: 1/2
    - módulo interface,
    - módulo sgdbaux

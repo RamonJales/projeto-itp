@@ -1,10 +1,10 @@
-#include "interface.h"
-#include "straux.h"
-#include "sgdbaux.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "interface.h"
+#include "straux.h"
+#include "sgdbaux.h"
 
 #define MAX_COLUMN_NAME 50
 
@@ -141,4 +141,12 @@ void clearTerminal() {
     #else
         system("clear");
     #endif
+}
+
+void clearTerminal2() {
+    for (int i = 0; i < 20; i++)
+    {
+        printf("\n");
+    }
+    
 }

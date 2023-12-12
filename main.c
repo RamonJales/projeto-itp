@@ -30,7 +30,7 @@ int main() {
 
                 interfaceCreateTable(&colQty, colTyp, colNames, pkName, tableName);      
 
-                create_table(colQty, colTyp, colNames, pkName, tableName);
+                createTable(colQty, colTyp, colNames, pkName, tableName);
 
                 freeMatrix(colQty, colNames);
                 free(colTyp);
@@ -42,25 +42,34 @@ int main() {
                 listTables();
                 break;
             case 3: { //CRIAR NOVA LINHA
-                int colQty;
-                char tableName[MAX_TABLE_NAME];
-                char **colValues = (char**) malloc(sizeof(char *));
+                int rowQty;
+                printf("Quantas linha deseja adicionar? ");
+                scanf("%d", &rowQty);
+                
+                for (int i = 0; i < rowQty; i++) {
+                    int colQty;
+                    char tableName[MAX_TABLE_NAME];
+                    char **colValues = (char**) malloc(sizeof(char *));
 
-                interfaceInsertTable(tableName, colValues, &colQty);
-                insert(tableName, colValues);
-                freeMatrix(colQty, colValues);
+                    interfaceInsertTable(tableName, colValues, &colQty);
+                    insertLine(tableName, colValues);
+                    freeMatrix(colQty, colValues);
+                    printf("\n");
+                }
                 break;
             }
             case 4: {// PRINTAR OS DADOS DE UMA TABELA
                 char tableName[MAX_TABLE_NAME];
                 interfacePrintDataFromTable(tableName);
                 printDataFromTable(tableName);
+                getchar();
                 break;
             }
             case 5: { //ACHAR UM VALOR NA TABELA
                 char tableName[MAX_TABLE_NAME];
                 interfaceSearchDataFromTable(tableName);
                 searchDataFromTable(tableName);
+                getchar();
                 break;
             }
             case 6: {// APAGAR UMA LINE
@@ -86,7 +95,7 @@ int main() {
             break; // Sai do loop principal se a opção for 8
         }
         printf("Pressione Enter para continuar...");
-        getchar(); 
+        getchar();
     }
     return 0;
 }

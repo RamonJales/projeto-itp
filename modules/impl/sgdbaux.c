@@ -1,8 +1,8 @@
-#include "sgdbaux.h"
-#include "straux.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "sgdbaux.h"
+#include "straux.h"
 
 int registerTable(char tableName[]) {
     FILE *file;
@@ -20,31 +20,31 @@ int registerTable(char tableName[]) {
 }
 
 char *getInformationFromRow(char *tableName, char *flag) {
-  FILE *file;
-  char row[1000];
+    FILE *file;
+    char row[1000];
 
-  // recuperar pk
-  char auxTableName[100];
-  putStrSufix(tableName, ".txt", auxTableName);
+    //Recuperar pk
+    char auxTableName[100];
+    putStrSufix(tableName, ".txt", auxTableName);
 
-  file = fopen(auxTableName, "r");
-  if (file == NULL) {
-    printf("Erro ao abrir o arquivo.\n");
-    return NULL;
-  }
-
-  // encontrar linha desejada
-  int len = strlen(flag);
-  while (fgets(row, sizeof(row), file) != NULL) {
-    int result = strncmp(flag, row, len);
-    if (result == 0) {
-      break;
+    file = fopen(auxTableName, "r");
+    if (file == NULL) {
+      printf("Erro ao abrir o arquivo.\n");
+      return NULL;
     }
-  }
 
-  char *information = strchr(row, ':') + 1;
-  fclose(file);
-  return information;
+    //Encontrar linha desejada
+    int len = strlen(flag);
+    while (fgets(row, sizeof(row), file) != NULL) {
+      int result = strncmp(flag, row, len);
+      if (result == 0) {
+        break;
+      }
+    }
+
+    char *information = strchr(row, ':') + 1;
+    fclose(file);
+    return information;
 }
 
 void updatePK(char *tableName, char *pk) {
@@ -63,15 +63,15 @@ void updatePK(char *tableName, char *pk) {
     }
 
     while(fgets(row, sizeof(row), file) != NULL) {
-        int result = strncmp("pk:", row, 3);
-        if(result == 0) {
-            fprintf(tmp, "pk:");
-            fprintf(tmp, pk);
-            fprintf(tmp, "\n");
-        }
-        else {
-            fprintf(tmp, row);
-        }
+      int result = strncmp("pk:", row, 3);
+      if(result == 0) {
+          fprintf(tmp, "pk:");
+          fprintf(tmp, pk);
+          fprintf(tmp, "\n");
+      }
+      else {
+          fprintf(tmp, row);
+      }
     }
 
     remove(tableName);

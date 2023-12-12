@@ -1,11 +1,11 @@
 #ifndef SGDB_H
 #define SGDB_H
 
-int create_table(int colQty, char *colTyp, char **colNames, char *pkName, char *tableName);
+int createTable(int colQty, char *colTyp, char **colNames, char *pkName, char *tableName);
 
 void listTables();
 
-int insert(char *tableName, char **colValues);
+int insertLine(char *tableName, char **colValues);
 
 void printDataFromTable(char *tableName);
 

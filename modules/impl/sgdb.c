@@ -1,18 +1,18 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "sgdb.h"
 #include "sgdbaux.h"
 #include "straux.h"
 #include "constant.h"
 #include "interface.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-//funções do banco
-int create_table(int colQty, char *colTyp, char **colNames, char *pkName, char *tableName) {
+//Funções do banco
+int createTable(int colQty, char *colTyp, char **colNames, char *pkName, char *tableName) {
     FILE *file;
     
-    //cria arquivo   
-    /*o processo de colocar o sufixo .txt está nessa função pelo fato de precisarmos do nome original.
+    //Cria arquivo   
+    /*O processo de colocar o sufixo .txt está nessa função pelo fato de precisarmos do nome original.
     De qualquer modo iríamos ter que retirar esse fufixo.*/
     char auxTableName[100];
     putStrSufix(tableName, ".txt", auxTableName);
@@ -22,14 +22,13 @@ int create_table(int colQty, char *colTyp, char **colNames, char *pkName, char *
         return 1;
     }
 
-    //cria metadados
+    //Cria metadados
     fprintf(file, "nome:");
     fprintf(file, tableName);
     fprintf(file, "\n");
-
     fprintf(file, "pk:0\n");
 
-    //deve ser int, pois usamos esse valor para alocação dinâmica na interface
+    //Deve ser int, pois usamos esse valor para alocação dinâmica na interface
     fprintf(file, "cols:");
     char col[100];
     sprintf(col, "%d", colQty);
@@ -39,13 +38,15 @@ int create_table(int colQty, char *colTyp, char **colNames, char *pkName, char *
     fprintf(file, pkName);
     fprintf(file, "|");
 
-    //columns
+    //Colunas
     for (int i = 0; i < colQty; i++) {
         fprintf(file, colNames[i]);
         fprintf(file, "-");
+
         char strChar[2];
         strChar[0] = colTyp[i];
         strChar[1] = '\0';
+
         fprintf(file, strChar);
         fprintf(file, "|");
     }
@@ -79,17 +80,19 @@ void listTables() {
     fclose(file);
 }
 
-int insert(char *tableName, char **colValues) {
+int insertLine(char *tableName, char **colValues) {
     FILE *file;
     
-    //recuperar pk
+    //Recuperar pk
     char pk[100];
     strcpy(pk, getInformationFromRow(tableName, "pk:"));
+
     int pkInt = atoi(pk) + 1;
     sprintf(pk, "%d", pkInt);
 
     char auxTableName[100];
     putStrSufix(tableName, ".txt", auxTableName);
+
     file = fopen(auxTableName, "a");
     if (file == NULL) {
         printf("Erro ao abrir o arquivo.\n");
@@ -98,12 +101,13 @@ int insert(char *tableName, char **colValues) {
 
     fprintf(file, pk);
     fprintf(file, "|");
-    //pega o número de colunas
+
+    //Pega o número de colunas
     char ncol[100];
     strcpy(ncol, getInformationFromRow(tableName, "cols"));
     int ncolInt = atoi(ncol);
 
-    //adicionar os valores
+    //Adicionar os valores
     for (int i = 0; i < ncolInt; i++) {
         fprintf(file, colValues[i]);
         fprintf(file, "|");
@@ -145,7 +149,6 @@ void printDataFromTable(char *tableName) {
         }
         printf("\n");
     }
-    //printf("\n");
 
     fclose(file);
 }
@@ -154,7 +157,7 @@ void searchDataFromTable(char *tableName) {
     FILE *file;
     int colQty;
     int searchOption;
-    char colNames[100][MAX_TABLE_NAME]; // Matriz para armazenar nomes das colunas
+    char colNames[100][MAX_TABLE_NAME];
     char searchColName[MAX_STR_LENGHT];
     char searchValue[MAX_STR_LENGHT];
     char line[MAX_LINE_LENGHT];
@@ -172,7 +175,7 @@ void searchDataFromTable(char *tableName) {
         return;
     }
 
-    //pega o nome das colunas(exceto a do pk) e coloca no vetor
+    //Pega o nome das colunas (exceto a da pk) e coloca no vetor
     fgets(line, sizeof(line), file);
     fgets(line, sizeof(line), file);
     fgets(line, sizeof(line), file);
@@ -183,9 +186,9 @@ void searchDataFromTable(char *tableName) {
         char strTmp[100];
         char strAux[100];
 
-        //tira o pk
+        //Tira o pk
         strcpy(strTmp, strchr(line, '|') + 1);
-        //tira as colunas(de tras) desnecessarias
+        //Tira as colunas(de tras) desnecessarias
         for (int j = 0; j < i; j++) {
             strcpy(strTmp, strchr(strTmp, '|') + 1);
         }
@@ -194,24 +197,24 @@ void searchDataFromTable(char *tableName) {
         strcpy(colNames[i], strAux);
     }
 
-    //imprime o nome das colunas
+    //Imprime o nome das colunas
     printf("Colunas disponíveis na tabela '%s':\n", tableName);
     for (int i = 0; i < colQty; i++) {
-                //imprime sem o tipo da coluna
+        //Imprime sem o tipo da coluna
         char *str = strchr(colNames[i], '-');
         int indexStr = str - colNames[i];
         printf("%d. %.*s\n", i+1, indexStr, colNames[i]);
     }
     printf("\n");
 
-    //selecionar a coluna
+    //Selecionar a coluna
     printf("Selecione o número da coluna para pesquisar: ");
-    //colunas começam de 1(a pk é a 0, mas ela não é printada)
+    //Colunas começam de 1 (a pk é a 0, mas ela não é printada)
     int selectedCol;
     scanf("%d", &selectedCol);
     printf("\n");
 
-    //tratamento de erro do input
+    //Tratamento de erro do input
     if (selectedCol < 1 || selectedCol > colQty) {
         printf("Seleção de coluna inválida.\n");
         fclose(file);
@@ -219,18 +222,18 @@ void searchDataFromTable(char *tableName) {
         return;
     }
 
-    //pegar o tipo da coluna
+    //Pegar o tipo da coluna
     strcpy(strColType, strchr(colNames[selectedCol-1], '-') + 1);
     char colType = strColType[0];
 
-    //pegar valores das colunas
-        //varre as linhas
+    //Pegar valores das colunas
+        //Varre as linhas
     int j = 0;
     while (fgets(line, sizeof(line), file) != NULL) {
         char auxLine[MAX_LINE_LENGHT];
         char tmpLine[MAX_LINE_LENGHT];
         //Na linha em que ele estiver, ele pega a informação apenas da coluna selecionadas 
-            //varre as colunas. O strcht pega a primeira ocorrencia do char, mas eu não quero a primeira ocorrencia
+            //Varre as colunas. O strcht pega a primeira ocorrencia do char, mas eu não quero a primeira ocorrencia
         for(int i = 0; i< selectedCol; i++) {
             if (i == 0) {
                 strcpy(auxLine, strchr(line, '|') + 1);
@@ -239,7 +242,7 @@ void searchDataFromTable(char *tableName) {
             }
         }
 
-        //tira o lixo da informação(colunas restantes)
+        //Tira o lixo da informação (colunas restantes)
         cutStrUntilFirstOccurrence(tmpLine, auxLine, '|');
         strcpy(colValues[j], tmpLine);
         j++;
@@ -260,50 +263,48 @@ void searchDataFromTable(char *tableName) {
 
     printf("Resultados da pesquisa:\n");
 
-    // ATUALIZAR SWITCH
-    // ATUALIZAR SWITCH
     if (searchOption == 1) {
         for (int i = 0; i < j; i++) {
-            //tipo int
+            //Tipo int
             if(colType == 'i') {
-                //transformar o valor para inteiro
+                //Transformar o valor para inteiro
                 int intColVal = atoi(colValues[i]);
                 int intSearchVal = atoi(searchValue);
-                //verificação
+                //Verificação
                 if(intColVal > intSearchVal) {
                     printf("valor: %d\n", intColVal);
                 }
             }
-            //tipo float
+            //Tipo float
             if(colType == 'f') {
                 float fColVal = (float) atof(colValues[i]);
                 float fSearchVal = (float) atof(searchValue);
-                //verificação
+                //Verificação
                 if(fColVal > fSearchVal) {
                     printf("valor: %f\n", fColVal);
                 }
             }
-            //tipo double 
+            //Tipo double 
             if(colType == 'd') {
                 double colVal = atof(colValues[i]);
                 double searchVal = atof(searchValue);
-                //verificação
+                //Verificação
                 if(colVal > searchVal) {
                     printf("valor: %f\n", colVal);
                 }
             }
-            //tipo char 
+            //Tipo char 
             if(colType == 'c') {
                 char colVal = colValues[i][0];
                 char searchVal = searchValue[0];
-                //verificação
+                //Verificação
                 if(colVal > searchVal) {
                     printf("valor: %c\n", colVal);
                 }
             }
-            //tipo string 
+            //Tipo string 
             if(colType == 's') {
-                //verificação
+                //Verificação
                 int result = strcmp(colValues[i], searchValue);
                 if(result > 0) {
                     printf("valor: %s\n", colValues[i]);
@@ -461,7 +462,7 @@ void searchDataFromTable(char *tableName) {
     } else if (searchOption == 6) {
         if(colType == 's') {
             for (int i = 0; i < j; i++) {
-                //se a função encontrar o searchValue em colValues[i], ele retorna o ponteiro para a posição onde essa ocorrencia ocorre
+                //Se a função encontrar o searchValue em colValues[i], ele retorna o ponteiro para a posição onde essa ocorrencia ocorre
                 if(strstr(colValues[i], searchValue) != NULL) {
                     printf("valor: %s\n", colValues[i]);
                 }
@@ -528,7 +529,7 @@ void deleteTable(char *tableName) {
         printf("Erro ao remover a tabela \"%s\".\n", tableName);
     }
 
-    //apagar nome da tabela no databases
+    //Apagar nome da tabela no databases
     FILE *file;
     FILE *tmp;
     char row[MAX_LINE_LENGHT];
