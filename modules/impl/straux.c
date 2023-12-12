@@ -6,6 +6,7 @@
 #include <constant.h>
 #include <stdbool.h>
 
+//exclui espaços vazios nos inputs
 void cutOffEmptySpaces(char *str) {
     int len = strlen(str);
 
@@ -32,6 +33,7 @@ void cutOffEmptySpaces(char *str) {
     
 }
 
+//a partir de uma certa posição
 void extractStr(char *str, char *strDestiny, int position) {
     int j = 0;
     if(position < strlen(str)) {
@@ -44,6 +46,7 @@ void extractStr(char *str, char *strDestiny, int position) {
     strDestiny[j] = '\0';
 }
 
+//extraio a parte esquerda de uma string ao encontrar um certo caracter
 void cutStrUntilFirstOccurrence(char *destiny, char *origin, char flag) {
     // Encontrar a posição do caractere na string original
     char *position = strchr(origin, flag);

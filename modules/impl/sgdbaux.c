@@ -43,9 +43,9 @@ char* getInformationFromRow(char *tableName, char *flag) {
     }
 
     char *information = (char*) malloc(100*sizeof(char));
-    extractStr(row, information, len+1);
+    information = strchr(row, len+1);
+    //extractStr(row, information, len+1);
     fclose(file);
-    //free(information);
 
     return information;
 }
