@@ -261,8 +261,8 @@ void searchDataFromTable(char *tableName) {
     printf("Resultados da pesquisa:\n");
 
     // ATUALIZAR SWITCH
-    switch (searchOption) {
-    case(1) :
+    // ATUALIZAR SWITCH
+    if (searchOption == 1) {
         for (int i = 0; i < j; i++) {
             //tipo int
             if(colType == 'i') {
@@ -280,7 +280,7 @@ void searchDataFromTable(char *tableName) {
                 float fSearchVal = (float) atof(searchValue);
                 //verificação
                 if(fColVal > fSearchVal) {
-                    printf("valor: %f\n", fColVal);
+                    printf("%f\n", fColVal);
                 }
             }
             //tipo double 
@@ -289,7 +289,7 @@ void searchDataFromTable(char *tableName) {
                 double searchVal = atof(searchValue);
                 //verificação
                 if(colVal > searchVal) {
-                    printf("valor: %f\n", colVal);
+                    printf("%f\n", colVal);
                 }
             }
             //tipo char 
@@ -298,7 +298,7 @@ void searchDataFromTable(char *tableName) {
                 char searchVal = searchValue[0];
                 //verificação
                 if(colVal > searchVal) {
-                    printf("valor: %c\n", colVal);
+                    printf("%c\n", colVal);
                 }
             }
             //tipo string 
@@ -306,173 +306,167 @@ void searchDataFromTable(char *tableName) {
                 //verificação
                 int result = strcmp(colValues[i], searchValue);
                 if(result > 0) {
-                    printf("valor: %s\n", colValues[i]);
+                    printf("%s\n", colValues[i]);
                 }
             }
         }
-        break;
-    case(2):
+    } else if (searchOption == 2) {
         for (int i = 0; i < j; i++) {
             if(colType == 'i') {
                 int intColVal = atoi(colValues[i]);
                 int intSearchVal = atoi(searchValue);
                 if(intColVal >= intSearchVal) {
-                    printf("valor: %d\n", intColVal);
+                    printf("%d\n", intColVal);
                 }
             }
             if(colType == 'f') {
                 float fColVal = (float) atof(colValues[i]);
                 float fSearchVal = (float) atof(searchValue);
                 if(fColVal >= fSearchVal) {
-                    printf("valor: %f\n", fColVal);
+                    printf("%f\n", fColVal);
                 }
             }
             if(colType == 'd') {
                 float colVal = atof(colValues[i]);
                 float searchVal = atof(searchValue);
                 if(colVal >= searchVal) {
-                    printf("valor: %f\n", colVal);
+                    printf("%f\n", colVal);
                 }
             }
             if(colType == 'c') {
                 char colVal = colValues[i][0];
                 char searchVal = searchValue[0];
                 if(colVal >= searchVal) {
-                    printf("valor: %c\n", colVal);
+                    printf("%c\n", colVal);
                 }
             }
             if(colType == 's') {
                 int result = strcmp(colValues[i], searchValue);
                 if(result >= 0) {
-                    printf("valor: %s\n", colValues[i]);
+                    printf("%s\n", colValues[i]);
                 }
             }
         }
-        break;
-    case(3) :
+    } else if (searchOption == 3) {
         for (int i = 0; i < j; i++) {
             if(colType == 'i') {
                 int intColVal = atoi(colValues[i]);
                 int intSearchVal = atoi(searchValue);
                 if(intColVal == intSearchVal) {
-                    printf("valor: %d\n", intColVal);
+                    printf("%d\n", intColVal);
                 }
             }
             if(colType == 'f') {
                 float fColVal = (float) atof(colValues[i]);
                 float fSearchVal = (float) atof(searchValue);
                 if(fColVal == fSearchVal) {
-                    printf("valor: %f\n", fColVal);
+                    printf("%f\n", fColVal);
                 }
             }
             if(colType == 'd') {
                 float colVal = atof(colValues[i]);
                 float searchVal = atof(searchValue);
                 if(colVal == searchVal) {
-                    printf("valor: %f\n", colVal);
+                    printf("%f\n", colVal);
                 }
             }
             if(colType == 'c') {
                 char colVal = colValues[i][0];
                 char searchVal = searchValue[0];
                 if(colVal == searchVal) {
-                    printf("valor: %c\n", colVal);
+                    printf("%c\n", colVal);
                 }
             }
             if(colType == 's') {
                 int result = strcmp(colValues[i], searchValue);
                 if(result == 0) {
-                    printf("valor: %s\n", colValues[i]);
+                    printf("%s\n", colValues[i]);
                 }
             }
         }
-        break;
-    case(4):
+    } else if (searchOption == 4) {
         for (int i = 0; i < j; i++) {
             if(colType == 'i') {
                 int intColVal = atoi(colValues[i]);
                 int intSearchVal = atoi(searchValue);
                 if(intColVal < intSearchVal) {
-                    printf("valor: %d\n", intColVal);
+                    printf("%d\n", intColVal);
                 }
             }
             if(colType == 'f') {
                 float fColVal = (float) atof(colValues[i]);
                 float fSearchVal = (float) atof(searchValue);
                 if(fColVal < fSearchVal) {
-                    printf("valor: %f\n", fColVal);
+                    printf("%f\n", fColVal);
                 }
             }
             if(colType == 'd') {
                 float colVal = atof(colValues[i]);
                 float searchVal = atof(searchValue);
                 if(colVal < searchVal) {
-                    printf("valor: %f\n", colVal);
+                    printf("%f\n", colVal);
                 }
             }
             if(colType == 'c') {
                 char colVal = colValues[i][0];
                 char searchVal = searchValue[0];
                 if(colVal < searchVal) {
-                    printf("valor: %c\n", colVal);
+                    printf("%c\n", colVal);
                 }
             }
             if(colType == 's') {
                 int result = strcmp(colValues[i], searchValue);
                 if(result < 0) {
-                    printf("valor: %s\n", colValues[i]);
+                    printf("%s\n", colValues[i]);
                 }
             }
         }
-        break;
-    case(5) :
+    } else if (searchOption == 5) {
         for (int i = 0; i < j; i++) {
             if(colType == 'i') {
                 int intColVal = atoi(colValues[i]);
                 int intSearchVal = atoi(searchValue);
                 if(intColVal <= intSearchVal) {
-                    printf("valor: %d\n", intColVal);
+                    printf("%d\n", intColVal);
                 }
             }
             if(colType == 'f') {
                 float fColVal = (float) atof(colValues[i]);
                 float fSearchVal = (float) atof(searchValue);
                 if(fColVal <= fSearchVal) {
-                    printf("valor: %f\n", fColVal);
+                    printf("%f\n", fColVal);
                 }
             }
             if(colType == 'd') {
                 float colVal = atof(colValues[i]);
                 float searchVal = atof(searchValue);
                 if(colVal <= searchVal) {
-                    printf("valor: %f\n", colVal);
+                    printf("%f\n", colVal);
                 }
             }
             if(colType == 'c') {
                 char colVal = colValues[i][0];
                 char searchVal = searchValue[0];
                 if(colVal <= searchVal) {
-                    printf("valor: %c\n", colVal);
+                    printf("%c\n", colVal);
                 }
             }
             if(colType == 's') {
                 int result = strcmp(colValues[i], searchValue);
                 if(result <= 0) {
-                    printf("valor: %s\n", colValues[i]);
+                    printf("%s\n", colValues[i]);
                 }
             }
         }
-        break;
-    case(6):
+    } else if (searchOption == 6) {
         if(colType == 's') {
             for (int i = 0; i < j; i++) {
                 //se a função encontrar o searchValue em colValues[i], ele retorna o ponteiro para a posição onde essa ocorrencia ocorre
                 if(strstr(colValues[i], searchValue) != NULL) {
-                    printf("valor: %s\n", colValues[i]);
+                    printf("%s\n", colValues[i]);
                 }
             }
         }
-        break;
     }
 
     fclose(file);
