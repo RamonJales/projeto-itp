@@ -5,7 +5,7 @@
 
 int main() {
 
-    searchDataFromTable("test1");
+    searchDataFromTable("test3");
 
     // FILE *file;
     // char colNames[100][100];

@@ -225,7 +225,11 @@ void searchDataFromTable(char *tableName) {
         //Na linha em que ele estiver, ele pega a informação apenas da coluna selecionadas 
             //varre as colunas. O strcht pega a primeira ocorrencia do char, mas eu não quero a primeira ocorrencia
         for(int i = 0; i< selectedCol; i++) {
-            strcpy(auxLine, strchr(line, '|') + 1);
+            if (i == 0) {
+                strcpy(auxLine, strchr(line, '|') + 1);
+            } else {
+                strcpy(auxLine, strchr(auxLine, '|') + 1);
+            }
         }
 
         //tira o lixo da informação(colunas restantes)
@@ -255,7 +259,7 @@ void searchDataFromTable(char *tableName) {
                 int intSearchVal = atoi(searchValue);
                 //verificação
                 if(intColVal > intSearchVal) {
-                    printf("%d\n", intColVal);
+                    printf("valor: %d\n", intColVal);
                 }
             }
             //tipo float
@@ -282,7 +286,7 @@ void searchDataFromTable(char *tableName) {
                 char searchVal = searchValue[0];
                 //verificação
                 if(colVal > searchVal) {
-                    printf("%f\n", colVal);
+                    printf("%c\n", colVal);
                 }
             }
             //tipo string 
@@ -322,7 +326,7 @@ void searchDataFromTable(char *tableName) {
                 char colVal = colValues[i][0];
                 char searchVal = searchValue[0];
                 if(colVal >= searchVal) {
-                    printf("%f\n", colVal);
+                    printf("%c\n", colVal);
                 }
             }
             if(colType == 's') {
@@ -360,7 +364,7 @@ void searchDataFromTable(char *tableName) {
                 char colVal = colValues[i][0];
                 char searchVal = searchValue[0];
                 if(colVal == searchVal) {
-                    printf("%f\n", colVal);
+                    printf("%c\n", colVal);
                 }
             }
             if(colType == 's') {
@@ -398,7 +402,7 @@ void searchDataFromTable(char *tableName) {
                 char colVal = colValues[i][0];
                 char searchVal = searchValue[0];
                 if(colVal < searchVal) {
-                    printf("%f\n", colVal);
+                    printf("%c\n", colVal);
                 }
             }
             if(colType == 's') {
@@ -436,7 +440,7 @@ void searchDataFromTable(char *tableName) {
                 char colVal = colValues[i][0];
                 char searchVal = searchValue[0];
                 if(colVal <= searchVal) {
-                    printf("%f\n", colVal);
+                    printf("%c\n", colVal);
                 }
             }
             if(colType == 's') {
