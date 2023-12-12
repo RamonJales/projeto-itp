@@ -87,8 +87,8 @@ void interfaceInsertTable(char *tableName, char **colValues, int *colQty) {
 
 void interfacePrintDataFromTable(char *tableName) {
     printf("Informe o nome da tabela: ");
-    fgets(tableName, sizeof(tableName), stdin);
-    tableName[strcspn(tableName, "\n")] = '\0'; // Remover o caractere de nova linha, se presente
+    scanf("%s", tableName);
+    cutOffEmptySpaces(tableName);
     
     for (int i = 0; tableName[i]; i++) {
         tableName[i] = tolower(tableName[i]);
@@ -97,18 +97,18 @@ void interfacePrintDataFromTable(char *tableName) {
 
 void interfaceSearchDataFromTable(char *tableName) {
     printf("Informe o nome da tabela: ");
-    fgets(tableName, sizeof(tableName), stdin);
-    tableName[strcspn(tableName, "\n")] = '\0';
+    scanf("%s", tableName);
+    cutOffEmptySpaces(tableName);
 }
 
 void interfaceDeleteLine(char *tableName, char *pkName) {
     printf("Informe o nome da tabela: ");
-    fgets(tableName, sizeof(tableName), stdin);
-    tableName[strcspn(tableName, "\n")] = '\0';
+    scanf("%s", tableName);
+    cutOffEmptySpaces(tableName);
 
     printf("Informe a chave primária da tupla a ser apagada: ");
-    fgets(pkName, sizeof(pkName), stdin);
-    pkName[strcspn(pkName, "\n")] = '\0';
+    scanf("%s", pkName);
+    cutOffEmptySpaces(pkName);
 
     for (int i = 0; tableName[i]; i++) {
     tableName[i] = tolower(tableName[i]);
