@@ -55,7 +55,7 @@ void interfaceCreateTable(int *colQty, char *colTyp, char **colNames, char *pkNa
         removeCharFromString(colNames[i], '|');
         removeCharFromString(colNames[i], '-');
 
-        printf("Informe o tipo da coluna %d: ", i+1);
+        printf("Informe o tipo da coluna %d: (apenas o primeiro caracter do tipo: s/c/i/f/d)", i+1);
         scanf(" %c", &colTyp[i]);
         getchar();
     }
