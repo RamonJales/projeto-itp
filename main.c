@@ -28,7 +28,7 @@ int main() {
                 char pkName[MAX_PK_NAME];
                 char tableName[MAX_TABLE_NAME];
 
-                interfaceCreateTable(&colQty, colTyp, colNames, pkName, tableName);      
+                interfaceCreateTable(&colQty, colTyp, colNames, pkName, tableName);
 
                 createTable(colQty, colTyp, colNames, pkName, tableName);
 
